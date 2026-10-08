@@ -22,7 +22,9 @@ If you are new to this repository, do these five things in order.
 
 All tasks are cards on the team's Kanban board:
 
-**Board:** (link added when the board is created)
+**Board:** https://github.com/users/alafwaj/projects/2
+
+If it opens as a list, click the small arrow next to the view name and choose **Board** under Layout.
 
 - **To pick a task:** open a card, click **Assignees** on the right, and choose yourself.
 - **When you start:** drag your card to **In progress**.

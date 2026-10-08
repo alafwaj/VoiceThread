@@ -2,7 +2,7 @@
 
 The course asks for screenshots of the board at the beginning, middle, and end of each sprint, to show progress.
 
-Board: (link added when the board is created)
+Board: https://github.com/users/alafwaj/projects/2
 
 How to take one:
 
