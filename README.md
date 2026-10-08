@@ -86,7 +86,7 @@ Amin (team leader), Rayyan, Layla, Omar, Yagoob, Yousif.
 | Role | Who |
 |---|---|
 | Team leader and reviewer | Amin |
-| Scrum Master, Sprint 1 (runs meetings, keeps the process records) | (name to be added) |
+| Scrum Master, Sprint 1 (runs meetings, keeps the process records) | Amin |
 | Product Owner | Course instructor |
 
 The Scrum Master role rotates each sprint.
