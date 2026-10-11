@@ -106,6 +106,10 @@ The project brief lists advanced features that would take far more than one seme
 
 ## 7. Open questions
 
-*Package 2. Anything the team is unsure about and needs the instructor (Product Owner) to answer. Leave empty if there is nothing.*
+Questions for the instructor (Product Owner):
 
--
+1. The rubric was written for a task app and mentions a "task completion toggle and prioritization". We plan to read this as bookmark and follow toggles, with the order of the Home feed as prioritization. Is that acceptable?
+2. For "local storage integration", we plan to keep accounts, posts, and audio in a database and files on the computer running the app. Does that count, or do you want the browser's local storage used as well?
+3. Does full marks require any of the brief's advanced features, or is the foundation plus the conversation tree enough?
+4. The brief gives 2 to 5 minutes as the post length in one place and 30 seconds to 5 minutes in another. We have used 30 seconds to 5 minutes for posts and replies. Is that right?
+5. Can we demonstrate the app running locally on a laptop rather than hosted online?
