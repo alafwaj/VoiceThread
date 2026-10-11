@@ -93,11 +93,16 @@ The project brief lists advanced features that would take far more than one seme
 
 ## 6. Non-functional requirements
 
-*Package 2. Six to eight requirements about how well the system works, not what it does: usability, security, performance, accessibility, reliability, maintainability. Number them NFR-01 onward. Make each one checkable.*
-
 | ID | Area | Requirement |
 |---|---|---|
-| NFR-01 | | |
+| NFR-01 | Usability | At least 3 testers who have never used the app can record and publish a post in under 3 minutes without help. |
+| NFR-02 | Responsive design | Every screen can be used at widths from 360 px (phone) to 1440 px (laptop) without scrolling sideways. |
+| NFR-03 | Accessibility | Every button and control, including the audio player, can be used with the keyboard alone and has a text label that a screen reader can announce. |
+| NFR-04 | Security | Passwords are stored only as hashes, and the server checks that the user is logged in and owns the data before every change. |
+| NFR-05 | Performance | On the demo laptop, a feed page of 20 posts loads in under 2 seconds, and a thread of 100 replies loads in under 3 seconds. |
+| NFR-06 | Reliability | No reply is ever saved without a valid parent post, and a failed upload leaves no half-saved post or orphaned audio file. |
+| NFR-07 | Compatibility | Every feature works in the current versions of Chrome and Edge on Windows. |
+| NFR-08 | Maintainability | A team member who has not seen the project can get it running on their own computer in under 15 minutes by following the README. |
 
 ## 7. Open questions
 
