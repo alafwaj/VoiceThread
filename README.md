@@ -4,7 +4,7 @@ An audio-first social network. Users record short voice posts and reply with voi
 
 Project 3 for SWEN 360 / CMPE 460 Software Design and Engineering, American University of Bahrain, Fall 2026.
 
-**Current sprint:** Sprint 1, Assignment 1 (due October 16, 2026). This sprint is requirements, initial design, and working as an agile team. No application code is written yet.
+**Current sprint:** Sprint 1, Assignment 1 (due October 12, 2026; Course Phase 1 is due October 16, 2026). This sprint is requirements, initial design, and working as an agile team. No application code is written yet.
 
 ---
 

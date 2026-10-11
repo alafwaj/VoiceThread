@@ -36,15 +36,50 @@ Rules:
 
 ## Entries
 
-No stand-ups recorded yet.
+### 2026-10-11 — Sprint 1, stand-up 7
+
+**Run by:** Amin Fares
+**Present:** Amin, Rayyan, Layla, Omar, Yagoob, Yousif
+**Absent:** None
+**Proof:** none
+
+| Member | Done since last stand-up | Doing next | Blocked by |
+|---|---|---|---|
+| Rayyan, Layla, Omar, Yagoob, Yousif | Created GitHub accounts and got familiar with the repository and tools, partly through tutorial videos. Worked locally; nothing pushed yet. | Commit and push their package work on October 11 and 12. | None raised |
+| Amin | Set up the team repository, the Kanban board, and the document and process templates. | Not recorded at the meeting | None raised |
+
+**Decisions:**
+- Rayyan owns Package 4 (wireframes).
+- After the stand-up, on the same day, the Scrum Master assigned the other packages: Yagoob, Package 3 (architecture and initial design); Omar, Package 2 (requirements); Layla, Package 5 (backlog and sprint plan); Yousif, Package 1 (user stories).
+- Amin, as Scrum Master, owns the seven process cards.
+
+**Actions (who, what, by when):**
+- All members: push their package work to their own branch, by October 12.
 
 ## Meetings held before this log started
 
 If the team met before it began keeping this log, record those meetings here once. Write them from what the members who attended remember, and say so. Use the real dates. Where a detail cannot be recalled, write "not recalled".
 
-Written on:
-Written by:
+Written on: October 11, 2026
+Written by: Amin Fares (Scrum Master), from memory
+Confirmed by: the other members, on October 12, 2026
+
+Each meeting lasted 15 to 30 minutes.
 
 | # | Date held | Present | Absent | What was discussed and decided |
 |---|---|---|---|---|
-| | | | | |
+| 1 | Sunday, September 27, 2026 | Amin, Rayyan, Layla, Omar, Yagoob | Yousif (had not yet joined the team) | See the summary below |
+| 2 | Tuesday, September 29, 2026 | Amin, Rayyan, Layla, Omar, Yagoob | Yousif (had not yet joined the team) | See the summary below |
+| 3 | Thursday, October 1, 2026 | Amin, Rayyan, Layla, Omar, Yagoob | Yousif (had not yet joined the team) | See the summary below |
+| 4 | Sunday, October 4, 2026 | Amin, Rayyan, Layla, Omar, Yagoob | Yousif (had not yet joined the team) | See the summary below |
+| 5 | Tuesday, October 6, 2026 | Amin, Rayyan, Layla, Omar, Yagoob, Yousif | None | Yousif's first meeting. By the end of this meeting the team had agreed what each member would work on. |
+| 6 | Thursday, October 8, 2026 | Amin, Rayyan, Layla, Omar, Yagoob, Yousif | None | The team discussed getting ready to start the project work. |
+
+The team did not record which topic was covered on which day, so the content of these meetings is summarised together.
+
+- Meetings 1 to 6 were mainly about the team getting to understand the tools it will use, such as GitHub and Figma.
+- Across meetings 1 to 5 the team also discussed the project and what each member would work on. This was settled by meeting 5.
+- Between meetings, members created their GitHub accounts and got familiar with the tools, partly by watching tutorial videos.
+- Members worked locally in this period and pushed nothing to the repository. The work was not yet organised into the five packages on the board, so members did not know their work by package. The Scrum Master assigned the package owners on October 11 (see stand-up 7).
+- Which topic was covered on which day: not recalled.
+- Blockers raised: none. Quizzes and assignments in other courses slowed the team down in this period (see `impediment-log.md`).
