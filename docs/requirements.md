@@ -62,11 +62,34 @@ The project brief lists advanced features that would take far more than one seme
 
 ## 5. Functional requirements
 
-*Package 2. About 20 requirements: things the system must do. Number them FR-01, FR-02, and so on. Group them by area. Each one is a single sentence that can be tested, and each should trace to a user story in section 3.*
+> User story IDs refer to section 3. They are provisional until Package 1 is merged: US-01 account, US-02 profile, US-03 record and publish, US-04 listen, US-05 reply, US-06 conversation tree, US-07 topics, US-08 follow and feed, US-09 bookmark, US-10 share.
 
 | ID | Area | Requirement | User story |
 |---|---|---|---|
-| FR-01 | | | |
+| FR-01 | Accounts | A visitor can create an account with a username and an email that nobody else has used and a password of at least 8 characters. | US-01 |
+| FR-02 | Accounts | A registered user can log in with their username or email and their password. | US-01 |
+| FR-03 | Accounts | A logged-in user can log out, after which pages that need an account send them to the login page. | US-01 |
+| FR-04 | Profiles | A profile page shows the user's display name, photo, bio, number of followers and followed users, and their voice posts. | US-02 |
+| FR-05 | Profiles | A user can change their own display name, photo, and bio, and cannot change anyone else's. | US-02 |
+| FR-06 | Recording | The app records audio from the microphone once the user allows it, and explains what to do if permission is refused or no microphone is found. | US-03 |
+| FR-07 | Recording | While recording, the screen shows the time recorded so far and the 5-minute limit, and recording stops by itself at 5 minutes. | US-03 |
+| FR-08 | Recording | Before publishing, the user can listen to the recording, record it again, or discard it. | US-03 |
+| FR-09 | Recording | Publishing a post requires a title and 1 to 3 topics, and a description is optional. | US-03, US-07 |
+| FR-10 | Recording | The server refuses recordings shorter than 30 seconds, longer than 5 minutes, or in a file type it does not accept, and the user sees why. | US-03 |
+| FR-11 | Recording | A user can delete their own posts, and the server refuses a delete request from anyone who is not the author. | US-03 |
+| FR-12 | Listening | The player has play and pause, a progress bar the user can drag to any point, and the elapsed and total time. | US-04 |
+| FR-13 | Listening | The user can set playback speed to 0.5x, 0.75x, 1x, 1.25x, 1.5x, 1.75x, or 2x. | US-04 |
+| FR-14 | Replies | A user can reply with a voice recording to any post or reply, and the reply stays linked to the exact post it answers. | US-05 |
+| FR-15 | Conversation tree | The thread page shows the original post with every reply placed under the post it answers, at any depth. | US-06 |
+| FR-16 | Conversation tree | Each post in the tree shows who recorded it, how long it is, and how many direct replies it has. | US-06 |
+| FR-17 | Conversation tree | The user can collapse any branch to hide its replies, see how many are hidden, and expand it again. | US-06 |
+| FR-18 | Conversation tree | When a post that has replies is deleted, a "post deleted" marker takes its place, so its replies keep their position in the tree. | US-03, US-06 |
+| FR-19 | Topics | Topics come from a fixed list (for example technology, philosophy, and storytelling), and each topic has a page listing its posts with the newest first. | US-07 |
+| FR-20 | Following | A user can follow and unfollow other users, but cannot follow themselves. | US-08 |
+| FR-21 | Feed | The Home feed lists posts from the users someone follows, newest first, and shows recent posts from everyone when they follow nobody. | US-08 |
+| FR-22 | Bookmarks | A user can bookmark a post, remove the bookmark, and see all their bookmarks on a Bookmarks page that only they can view. | US-09 |
+| FR-23 | Sharing | A user can copy a link to any post, and opening the link shows that post's thread with the post highlighted. | US-10 |
+| FR-24 | Storage | Accounts, posts, audio, follows, and bookmarks are still there after the page is refreshed or the server is restarted. | US-01, US-03, US-08, US-09 |
 
 ## 6. Non-functional requirements
 
