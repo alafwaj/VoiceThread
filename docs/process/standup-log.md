@@ -45,8 +45,8 @@ Rules:
 
 | Member | Done since last stand-up | Doing next | Blocked by |
 |---|---|---|---|
-| Rayyan, Layla, Omar, Yagoob, Yousif | Created GitHub accounts and got familiar with the repository and tools, partly through tutorial videos. Worked locally; nothing pushed yet. | Commit and push their package work on October 11 and 12. | Not recorded at the meeting |
-| Amin | Not recorded at the meeting | Not recorded at the meeting | Not recorded at the meeting |
+| Rayyan, Layla, Omar, Yagoob, Yousif | Created GitHub accounts and got familiar with the repository and tools, partly through tutorial videos. Worked locally; nothing pushed yet. | Commit and push their package work on October 11 and 12. | None raised |
+| Amin | Set up the team repository, the Kanban board, and the document and process templates. | Not recorded at the meeting | None raised |
 
 **Decisions:**
 - Rayyan owns Package 4 (wireframes).
@@ -83,4 +83,4 @@ The team did not record which topic was covered on which day, so the content of 
 - Between meetings, members created their GitHub accounts and got familiar with the tools, partly by watching tutorial videos.
 - Members worked locally in this period and pushed nothing to the repository. The work was not yet organised into the five packages on the board, so members did not know their work by package. The Scrum Master assigned the package owners on October 11 (see stand-up 7).
 - Which topic was covered on which day: not recalled.
-- Blockers raised: not recalled.
+- Blockers raised: none. Quizzes and assignments in other courses slowed the team down in this period (see `impediment-log.md`).
