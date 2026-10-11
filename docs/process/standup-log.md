@@ -78,7 +78,8 @@ Each meeting lasted 15 to 30 minutes.
 
 The team did not record which topic was covered on which day, so the content of these meetings is summarised together.
 
-- Across meetings 1 to 5 the team discussed the project and what each member would work on. This was settled by meeting 5.
+- Meetings 1 to 6 were mainly about the team getting to understand the tools it will use, such as GitHub and Figma.
+- Across meetings 1 to 5 the team also discussed the project and what each member would work on. This was settled by meeting 5.
 - Between meetings, members created their GitHub accounts and got familiar with the tools, partly by watching tutorial videos.
 - Members worked locally in this period and pushed nothing to the repository. The work was not yet organised into the five packages on the board, so members did not know their work by package. The Scrum Master assigned the package owners on October 11 (see stand-up 7).
 - Which topic was covered on which day: not recalled.

@@ -24,7 +24,7 @@ The minutes below are written during or straight after the real planning meeting
 **Present:** All members at every meeting, except Yousif, who joined the team at the meeting on October 6
 **Absent:** None
 
-**Sprint goal agreed:** Not recorded
+**Sprint goal agreed:** Complete Assignment 1: the requirements document, the initial design document with wireframes, and the product backlog, with every member contributing their own package through the shared GitHub repository and the Kanban board. (Set by the Scrum Master on October 12, 2026. It was not discussed at a meeting.)
 
 **Cards selected and owners**
 
