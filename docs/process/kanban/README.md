@@ -16,6 +16,6 @@ Take each screenshot on its day. A board cannot be photographed in the past.
 
 | Sprint | Point | Date and time taken | File | What it shows |
 |---|---|---|---|---|
-| 1 | Beginning | | | |
+| 1 | Beginning | October 11, 2026, 11:38 PM | `sprint-1-beginning-2026-10-11.png` | All 15 Sprint 1 cards are in To do and no card has an owner yet. Taken before the package cards were assigned. |
 | 1 | Middle | | | |
 | 1 | End | | | |
