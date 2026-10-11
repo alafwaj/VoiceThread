@@ -17,5 +17,5 @@ Take each screenshot on its day. A board cannot be photographed in the past.
 | Sprint | Point | Date and time taken | File | What it shows |
 |---|---|---|---|---|
 | 1 | Beginning | October 11, 2026, 11:38 PM | `sprint-1-beginning-2026-10-11.png` | All 15 Sprint 1 cards are in To do and no card has an owner yet. Taken before the package cards were assigned. |
-| 1 | Middle | | | |
+| 1 | Middle | October 12, 2026, 12:30 AM | `sprint-1-middle-2026-10-12.png` | Every package card has an owner. 11 cards are in In progress, 2 in To do, and the planning minutes card is in Done. The instructor questions card (#14) was removed from the board, leaving 14 cards. |
 | 1 | End | | | |

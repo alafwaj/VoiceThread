@@ -44,7 +44,7 @@ The Scrum Master chose the owners of Packages 1, 2, 3 and 5, giving the harder p
 **Dates agreed:** board screenshots (beginning, middle, end): beginning taken on October 11, 2026; middle and end not yet agreed. Retrospective: not yet agreed.
 
 **Questions for the Product Owner:**
-- None recorded yet. They are tracked on card #14.
+- None recorded. The card for sending questions (#14) was removed from the board on October 12, 2026.
 
 **Decisions:**
 - Amin Fares is the Scrum Master for Sprint 1. The order of rotation for Sprints 2 and 3 is not yet decided.
