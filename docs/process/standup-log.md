@@ -60,10 +60,9 @@ Rules:
 
 If the team met before it began keeping this log, record those meetings here once. Write them from what the members who attended remember, and say so. Use the real dates. Where a detail cannot be recalled, write "not recalled".
 
-**Status: DRAFT, not yet confirmed by the other members. Remove this line once the team has read and confirmed it.**
-
 Written on: October 11, 2026
 Written by: Amin Fares (Scrum Master), from memory
+Confirmed by: the other members, on October 12, 2026
 
 Each meeting lasted 15 to 30 minutes.
 
