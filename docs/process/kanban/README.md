@@ -18,4 +18,4 @@ Take each screenshot on its day. A board cannot be photographed in the past.
 |---|---|---|---|---|
 | 1 | Beginning | October 11, 2026, 11:38 PM | `sprint-1-beginning-2026-10-11.png` | All 15 Sprint 1 cards are in To do and no card has an owner yet. Taken before the package cards were assigned. |
 | 1 | Middle | October 12, 2026, 12:30 AM | `sprint-1-middle-2026-10-12.png` | Every package card has an owner. 11 cards are in In progress, 2 in To do, and the planning minutes card is in Done. The instructor questions card (#14) was removed from the board, leaving 14 cards. |
-| 1 | End | | | |
+| 1 | End | October 13, 2026, 12:19 AM | `sprint-1-end-2026-10-13.png` | All five package cards, both "everyone" cards, the planning minutes and the stand-up log are in Done (9 cards). The board screenshots and impediment log cards are in In progress. The retrospective and submission cards are in To do with the 24 Sprint 2 and Sprint 3 backlog cards (26 cards). The individual sections card (#8) was removed from the board, leaving 37 cards. |
