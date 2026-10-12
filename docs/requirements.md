@@ -6,7 +6,7 @@
 
 ## 1. Product overview
 
-*Package 1. Three to five sentences. What VoiceThread is, who it is for, and what makes it different (a conversation is a tree: every reply answers one specific post).*
+VoiceThread is a web application where people talk to each other by recording short voice messages instead of typing. A user records a post of up to five minutes, and other users answer it with their own recordings. Replies can be answered in turn, so every conversation grows into a tree of voices rather than a flat list of comments. Listeners can follow one branch of the tree without losing track of the others. The application is built for university students and staff and runs locally for the course demonstration.
 
 ## 2. Users
 
