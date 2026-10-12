@@ -1,0 +1,67 @@
+## 2. Architecture
+
+```mermaid
+flowchart TD
+    UI["Web Interface"]
+    API["API Server"]
+    DB[("Database<br/>PostgreSQL")]
+    S3[("Audio Storage")]
+
+    UI -->|REST| API
+    API -->|SQL| DB
+    API -->|signed URL| UI
+    UI -->|upload / play audio| S3
+```
+
+- **Web Interface:** where users record, play and reply to audio posts. It only talks to the API server and to audio storage, never to the database.
+- **API Server:** handles sign-in, creating threads and posts, and linking replies to the posts they answer. It also hands out short-lived signed URLs for audio.
+- **Database:** stores users, threads and posts, including the links that form the conversation tree. It holds no audio.
+- **Audio Storage:** keeps the audio files. The database stores only each file's key, so large files never pass through the API server.
+
+## 3. Main Data
+
+| Entity | Main fields | Notes |
+|---|---|---|
+| **User** | id, name, email, created_at | One row per account |
+| **Thread** | id, title, root_post_id, created_by, created_at | One conversation |
+| **Post** | id, thread_id, parent_post_id, author_id, audio_key, duration_seconds, created_at | One recorded message, root or reply |
+| **Audio file** | stored in object storage under `audio_key` | Not in the database |
+
+Relationships: a user writes many posts, a thread contains many posts, and each post belongs to exactly one thread.
+
+## 4. How the Conversation Tree Is Stored
+
+Every post has a `parent_post_id` column.
+
+- A **root post** (the first post in a thread) has `parent_post_id = NULL`.
+- A **reply** stores the `id` of the post it answers in `parent_post_id`.
+- Every post also stores `thread_id`, so all posts in a conversation can be loaded with one query.
+
+Example:
+
+| id | thread_id | parent_post_id | meaning |
+|---|---|---|---|
+| 1 | 10 | NULL | Root post |
+| 2 | 10 | 1 | Reply to post 1 |
+| 3 | 10 | 1 | Another reply to post 1 |
+| 4 | 10 | 2 | Reply to post 2 |
+
+```mermaid
+flowchart TD
+    P1["Post 1 (root)"] --> P2["Post 2"]
+    P1 --> P3["Post 3"]
+    P2 --> P4["Post 4"]
+```
+
+To show a thread, the server runs `SELECT * FROM posts WHERE thread_id = 10`, and the app builds the tree in memory by grouping posts under their `parent_post_id`.
+
+This is called an adjacency list. It is simple to write and easy to understand. Alternatives such as a materialized path or closure table make deep subtree queries faster, but they make writes more complex, which we don't need at this stage.
+
+## 5. Main Operations
+
+1. Create an account and sign in.
+2. Start a thread by uploading a root audio post.
+3. Reply to a post by uploading audio and setting `parent_post_id`.
+4. View a thread (load its posts and build the tree).
+5. Play a post's audio through a signed URL.
+6. Delete or hide a post (the team still needs to decide what happens to its replies).
