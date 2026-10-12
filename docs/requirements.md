@@ -1,8 +1,7 @@
 # VoiceThread — Requirements
 
-> **Status:** sections 4 to 7 drafted. Sections 1 to 3 not started.
+> **Status:** sections 1 to 7 drafted. Not yet reviewed by the instructor.
 > **Owners:** Package 1 writes sections 1 to 3. Package 2 writes sections 4 to 7.
-> Lines in *italics* are instructions. Delete each one when you have written that section.
 
 ## 1. Product overview
 
