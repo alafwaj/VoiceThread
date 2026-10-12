@@ -1,5 +1,0 @@
-Layer	                  Suggestion	                                                        Reason
-Interface     React web app (or the mobile framework your team knows)	Browser MediaRecorder API handles recording and playback; large ecosystem
-Server	      Node.js/TypeScript REST API (or Python/FastAPI)           	Simple, familiar, easy to test; only a few operations needed
-Database	   PostgreSQL	                                         Relational fit for users, threads and posts; handles tree queries well
-Audio storage	   S3-compatible object storage                    	Audio files are large blobs, so keep them out of the database; the DB stores only the file key
