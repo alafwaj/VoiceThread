@@ -86,7 +86,5 @@ To show a conversation, the server runs `SELECT * FROM posts WHERE root_post_id 
 
 ## 6. Wireframes
 
-*Package 4. Link to the Figma file and to the images in `docs/wireframes/`.*
-
-- Figma file:
-- Images: [docs/wireframes/](wireframes/)
+- Figma file: https://www.figma.com/design/CKYiVGtwJllHe7USKXzevC/Wireframes
+- Images and notes: [docs/wireframes/](wireframes/)
