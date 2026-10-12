@@ -10,11 +10,13 @@ VoiceThread is a web application where people talk to each other by recording sh
 
 ## 2. Users
 
-*Package 1. A short table of the kinds of user (for example a listener, a contributor) and what each wants.*
-
-| User | What they want |
+| User | What they want from VoiceThread |
 |---|---|
-| | |
+| Visitor | To see what the product is and create an account so they can take part. |
+| Listener | To find conversations by topic or feed, play them at a comfortable speed, and follow one line of discussion through the tree. |
+| Contributor | To record posts and replies easily, follow people whose voices they value, and keep conversations they want to come back to. |
+
+A listener and a contributor are the same registered person. The two names describe what they are doing at that moment.
 
 ## 3. User stories
 
