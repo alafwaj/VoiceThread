@@ -7,7 +7,7 @@
 
 | Part | Technology | Why |
 |---|---|---|
-| Interface | Plain HTML, CSS and JavaScript pages | No build tools or installs, so every team member can run it by opening the project. The browser's built-in MediaRecorder handles recording and playback. |
+| Interface | React, set up with Vite | The same parts, such as the audio player and a post in the tree, appear on many screens, so each one is written once and reused. React is free, well documented, and runs locally with two commands. The browser's built-in MediaRecorder handles recording and playback. |
 | Server | Node.js with Express | One language (JavaScript) across the interface and the server, free, and small enough for six students to learn quickly. |
 | Database | SQLite | A single file with no database server to install or run. It costs nothing and is enough for a local demo on one laptop. |
 | Audio file storage | A normal folder on disk (`uploads/audio/`) | No cloud account and no cost. The database stores only the file name of each recording. |
