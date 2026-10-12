@@ -1,6 +1,6 @@
 # VoiceThread — Product Backlog
  
-> **Status:** ready for review. **Owner:** Package 5.
+> **Status:** done. The Sprint 2 and Sprint 3 items are on the board as cards. **Owner:** Package 5.
  
 ## 1. How the backlog is ordered
  
@@ -54,5 +54,5 @@ Items are ordered by what the rest of the app needs first. Storage and accounts 
  
 ## 5. On the board
  
-- [ ] Sprint 2 items added to the board
-- [ ] Sprint 3 items added to the board
+- [x] Sprint 2 items added to the board
+- [x] Sprint 3 items added to the board
