@@ -36,6 +36,38 @@ Rules:
 
 ## Entries
 
+### 2026-10-12 — Sprint 1, stand-up 8
+
+**Run by:** Amin Fares
+**Present:** Amin, Rayyan, Layla, Omar, Yagoob, Yousif
+**Absent:** None
+**Proof:** none
+
+This meeting was a working session on a Discord call from about 9 pm to 11 pm, so it was longer than a normal stand-up. Members worked on their packages during the call. It was written up on October 13, 2026, shortly after midnight.
+
+| Member | Done since last stand-up | Doing next | Blocked by |
+|---|---|---|---|
+| Yousif | Package 1 (product overview, users and 12 user stories) was merged through pull request #23. Reviewed the design in #25. | Not recorded at the meeting | None raised |
+| Omar | Package 2 (scope, 25 functional and 8 non-functional requirements, open questions) was merged through #20. | Not recorded at the meeting | None raised |
+| Yagoob | Package 3: first notes were merged as #21 and #22 without a review, then reworked into `docs/design.md` and merged through #25 during the call. | Not recorded at the meeting | None raised |
+| Layla | Package 5: the backlog with the Sprint 2 and Sprint 3 items was merged through #26 during the call. | Not recorded at the meeting | None raised |
+| Rayyan | Package 4: drew the phone wireframes in Figma. They were not pushed by the end of the call. Reviewed the backlog in #26. | Not recorded at the meeting | None raised |
+| Amin | Reviewed and merged #20, #23, #25 and #26, corrected the status line of the requirements (#24), took the middle-of-sprint board screenshot, and kept the board up to date. | Not recorded at the meeting | None raised |
+
+**Decisions:**
+- Before the call, the Scrum Master and the owners of Packages 1 and 2 settled two points so the two halves of the requirements agree: original posts and replies are both 30 seconds to 5 minutes, and the Home feed lists followed users first. Both are recorded in `docs/requirements.md`.
+- Assignment 1 is now due on October 13, 2026, after a one-day extension.
+- After the call, the same night, the Scrum Master proposed React for the interface in place of plain HTML and JavaScript pages, and all members agreed. This is recorded in `docs/design.md` through pull request #52.
+
+**Actions (who, what, by when):**
+- None recorded at the meeting.
+
+**After the call, the same night:**
+- The 24 backlog items were added to the board as cards with the Sprint 2 and Sprint 3 milestones (#27 to #50), and the backlog was updated through #51.
+- The wireframes for Package 4 were committed and merged through #53.
+- Omar reviewed #26, Layla reviewed #52 and Yagoob reviewed #53, so every member has now reviewed a teammate's pull request.
+- On October 13 the Scrum Master removed the card for the individual submission sections (#8) from the board. The individual reports are tracked with the submission document.
+
 ### 2026-10-11 — Sprint 1, stand-up 7
 
 **Run by:** Amin Fares
