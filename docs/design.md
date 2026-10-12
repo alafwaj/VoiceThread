@@ -1,43 +1,88 @@
 # VoiceThread — Initial Design
 
-> **Status:** not started.
+> **Status:** sections 1 to 5 written.
 > **Owner:** Package 3 (sections 1 to 5). Package 4 adds the wireframe links in section 6.
-> Lines in *italics* are instructions. Delete each one when you have written that section.
 
 ## 1. Technology choice
 
-*Say which technologies the team will use for the interface, the server, and the database, and give one or two reasons for each. The reference proposes React, Node.js with Express, and SQLite. You may keep that or change it, but explain the choice in your own words: why it suits a team of six students, a local demo, and no budget.*
-
 | Part | Technology | Why |
 |---|---|---|
-| Interface | | |
-| Server | | |
-| Database | | |
-| Audio file storage | | |
+| Interface | Plain HTML, CSS and JavaScript pages | No build tools or installs, so every team member can run it by opening the project. The browser's built-in MediaRecorder handles recording and playback. |
+| Server | Node.js with Express | One language (JavaScript) across the interface and the server, free, and small enough for six students to learn quickly. |
+| Database | SQLite | A single file with no database server to install or run. It costs nothing and is enough for a local demo on one laptop. |
+| Audio file storage | A normal folder on disk (`uploads/audio/`) | No cloud account and no cost. The database stores only the file name of each recording. |
+
+These choices fit our limits: a local demo on a laptop, no budget, and a team of six students. Heavier options such as PostgreSQL or cloud audio storage would add setup and cost with no benefit at this scale.
 
 ## 2. High-level architecture
 
-*One diagram showing the main parts of the system and how they talk to each other: the browser, the server, the database, and where audio files are stored. Draw it in any tool (draw.io, Figma, Mermaid) and put the image here, or write it as a Mermaid diagram so GitHub displays it.*
+```mermaid
+flowchart TD
+    UI["Web Interface (browser)"]
+    API["API Server"]
+    DB[("SQLite database")]
+    FS[("Audio folder")]
 
-*Then write one or two sentences for each part saying what it is responsible for.*
+    UI -->|REST| API
+    API -->|SQL| DB
+    API -->|read / write files| FS
+```
+
+- **Web Interface:** where users record, play, reply and browse. It talks only to the API server.
+- **API Server:** handles sign-in, original posts, replies, topics, follows, bookmarks and the Home feed. It also sends audio files to the browser.
+- **SQLite database:** stores all data except the audio itself, including the links that form the conversation tree.
+- **Audio folder:** holds the recorded audio files. The database stores each file's name.
 
 ## 3. Main data
 
-*List the main things the system stores (for example users, voice posts, topics, follows, bookmarks) and the most important fields of each. A table per item, or one table for all, is enough. This is a first version, not a full database design.*
-
 | Item | Key fields | Notes |
 |---|---|---|
-| | | |
+| **User** | id, username, email, password_hash, display_name, photo, bio, created_at | One row per account. Email and password are used to sign up and log in. Only the password hash is stored, never the password. |
+| **Topic** | id, name | A subject that original posts are filed under. |
+| **Post** | id, author_id, parent_post_id, root_post_id, title, description, audio_file, duration_seconds, created_at, is_deleted | One recording, either an original post or a reply. `is_deleted` marks a deleted post. |
+| **PostTopic** | post_id, topic_id | Links an original post to its topics. Each original post has 1 to 3 rows. |
+| **Follow** | follower_id, followed_user_id, created_at | Which user follows which user. |
+| **Bookmark** | user_id, post_id, created_at | A post a user has saved. |
 
 ## 4. How the conversation tree is stored
 
-*This is the core idea of the product, so explain it clearly. How does a reply know which post it answers? What does a root post look like? What happens to the replies if a post is deleted? A small example or drawing helps.*
+Every post has a `parent_post_id` column.
+
+- An **original post** has `parent_post_id = NULL`.
+- A **reply** stores the `id` of the post it answers in `parent_post_id`.
+- Every post also stores `root_post_id`, the id of the original post of its conversation, so a whole conversation can be loaded with one query.
+
+| id | root_post_id | parent_post_id | meaning |
+|---|---|---|---|
+| 1 | 1 | NULL | Original post |
+| 2 | 1 | 1 | Reply to post 1 |
+| 3 | 1 | 1 | Another reply to post 1 |
+| 4 | 1 | 2 | Reply to post 2 |
+
+```mermaid
+flowchart TD
+    P1["Post 1 (original post)"] --> P2["Post 2 (reply)"]
+    P1 --> P3["Post 3 (reply)"]
+    P2 --> P4["Post 4 (reply)"]
+```
+
+To show a conversation, the server runs `SELECT * FROM posts WHERE root_post_id = 1`, and the app builds the tree in memory by grouping posts under their `parent_post_id`. This is called an adjacency list: simple to write and easy to understand.
+
+**Deleting a post (FR-18).** A deleted post that has replies becomes a "post deleted" marker (`is_deleted = 1`). Its replies stay in place, because their `parent_post_id` still points to it.
 
 ## 5. Main operations
 
-*A short list of the main things the interface asks the server to do (for example register, log in, publish a post, reply to a post, load a thread). One line each. This is not a full API design.*
-
--
+- Sign up, log in, log out and edit your profile.
+- Create an original post (audio, title, description, 1 to 3 topics).
+- Reply to a post.
+- Load a conversation as a tree.
+- Play a post's audio.
+- Delete a post (see section 4 for what happens to its replies).
+- Browse topics and view the posts in a topic.
+- Follow and unfollow a user.
+- Load the Home feed.
+- Bookmark and unbookmark a post, and view your bookmarks.
+- Open a post through its share link.
 
 ## 6. Wireframes
 
