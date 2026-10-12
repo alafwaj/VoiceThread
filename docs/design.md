@@ -37,13 +37,12 @@ flowchart TD
 
 | Item | Key fields | Notes |
 |---|---|---|
-| **User** | id, username, password_hash, display_name, photo, bio, created_at | One row per account. Only the password hash is stored, never the password. |
+| **User** | id, username, email, password_hash, display_name, photo, bio, created_at | One row per account. Email and password are used to sign up and log in. Only the password hash is stored, never the password. |
 | **Topic** | id, name | A subject that original posts are filed under. |
-| **Post** | id, author_id, topic_id, parent_post_id, root_post_id, title, description, audio_file, duration_seconds, created_at, is_deleted | One recording, either an original post or a reply. `is_deleted` marks a deleted post. |
+| **Post** | id, author_id, parent_post_id, root_post_id, title, description, audio_file, duration_seconds, created_at, is_deleted | One recording, either an original post or a reply. `is_deleted` marks a deleted post. |
+| **PostTopic** | post_id, topic_id | Links an original post to its topics. Each original post has 1 to 3 rows. |
 | **Follow** | follower_id, followed_user_id, created_at | Which user follows which user. |
 | **Bookmark** | user_id, post_id, created_at | A post a user has saved. |
-
-The audio itself is stored in the audio folder, not in the database. This is a first version, not a full database design.
 
 ## 4. How the conversation tree is stored
 
@@ -73,8 +72,8 @@ To show a conversation, the server runs `SELECT * FROM posts WHERE root_post_id 
 
 ## 5. Main operations
 
-- Sign up, sign in and edit your profile.
-- Create an original post (audio, title, description, topic).
+- Sign up, log in, log out and edit your profile.
+- Create an original post (audio, title, description, 1 to 3 topics).
 - Reply to a post.
 - Load a conversation as a tree.
 - Play a post's audio.
