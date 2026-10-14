@@ -1,0 +1,19 @@
+{
+  "name": "voicethread",
+  "private": true,
+  "description": "Audio-first social network where voice replies form a conversation tree",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently --names server,client --prefix-colors blue,green \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "concurrently": "10.0.5"
+  }
+}

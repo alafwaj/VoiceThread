@@ -4,7 +4,7 @@ VoiceThread is an audio-first social network. You record a short voice post and 
 
 This is Project 3 for SWEN 360 / CMPE 460 (Software Design and Engineering) at the American University of Bahrain, Fall 2026.
 
-We are in Sprint 1, which is Assignment 1: requirements, the first design, and getting used to working as an agile team. Assignment 1 is due October 12, 2026 and Course Phase 1 is due October 16, 2026. There is no application code yet.
+We are at the end of Sprint 1: requirements, the first design, and getting used to working as an agile team. Assignment 1 was submitted on October 13, 2026, and Course Phase 1 is due October 16, 2026. The development environment is set up, but the app has no features yet. They start in Sprint 2.
 
 ## Team
 
@@ -25,6 +25,26 @@ The course instructor is the Product Owner. The Scrum Master changes every sprin
 2. Clone it and set your Git name and email. The commands are in [CONTRIBUTING.md](CONTRIBUTING.md).
 3. Open the board and find the card with your name on it.
 4. Read the card. It says what to write, which file it goes in, and when it counts as done.
+
+## Running the app
+
+You need Node.js 22.12 or newer. Check with `node -v`. If it is missing or older, install the LTS version from https://nodejs.org.
+
+In the repo folder, install the packages once (and again whenever `package.json` changes):
+
+```bash
+npm install
+```
+
+Then start the server and the interface together:
+
+```bash
+npm run dev
+```
+
+Open http://localhost:5173 in Chrome. The page should say "Server: running". If it says "not responding", look at the terminal for a `[server]` error. Press Ctrl+C in the terminal to stop both.
+
+The server runs on port 3001 and the interface on port 5173. The interface passes every `/api` request on to the server, so in the browser you only use port 5173.
 
 ## The board
 
@@ -48,7 +68,10 @@ Besides the five package cards there are "Everyone" cards that all six of us do 
 | `docs/backlog.md` | Features for Sprints 2 and 3 in priority order (Package 5) |
 | `docs/process/` | Sprint planning minutes, stand-up log, impediment log |
 | `docs/process/kanban/` | Board screenshots from the beginning, middle, and end of the sprint |
-| `client/`, `server/`, `shared/` | Frontend code, backend code, and code both sides use. Empty until Sprint 2 |
+| `package.json` | Lists the two halves of the app and the `npm run dev` command that starts both |
+| `client/` | The interface: React, set up with Vite. For now one placeholder page |
+| `server/` | The API server: Node.js with Express. For now one health check route |
+| `shared/` | Code both sides use, such as recording length limits. Empty until Sprint 2 |
 
 The files in `docs/` already have their headings, with a short note under each one saying what goes there.
 
@@ -79,6 +102,6 @@ The course allows AI tools. Use them to explain things, check your draft, or sug
 
 Each sprint needs a planning meeting, at least two stand-ups a week (eight or more in total), and a retrospective. The planning minutes, stand-ups and impediments are written up in `docs/process/`. The retrospective is submitted as its own PDF, not kept in the repo.
 
-## Tech we plan to use
+## Tech we use
 
-React for the interface, Node.js with Express for the server, and SQLite for the database, all running locally. This comes from the reference. The Package 3 owner confirms or changes it in `docs/design.md` and explains why.
+React (set up with Vite) for the interface, Node.js with Express for the server, and SQLite for the database, all running locally. The reasons are in section 1 of `docs/design.md`. The interface and the server are set up. SQLite and the audio folder are added with backlog item B-01 in Sprint 2.

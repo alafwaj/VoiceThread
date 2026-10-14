@@ -2,7 +2,7 @@
 
 Git steps for the team. Go through them in order the first time. After that you only need sections 3 to 6.
 
-You need Git installed (https://git-scm.com). From Sprint 2 you also need Node.js LTS (https://nodejs.org). Run the commands in a terminal: Git Bash or PowerShell on Windows, Terminal on a Mac.
+You need Git (https://git-scm.com) and Node.js 22.12 or newer (the LTS version from https://nodejs.org is fine). Run the commands in a terminal: Git Bash or PowerShell on Windows, Terminal on a Mac.
 
 ## 1. Clone the repository (once)
 
