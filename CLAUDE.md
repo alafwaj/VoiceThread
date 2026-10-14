@@ -25,7 +25,7 @@ The course grades each member's own contribution and the team's real agile proce
 4. Each member commits their own work from their own account. Do not commit on behalf of a different person, and do not add a `Co-Authored-By` line.
 5. Keep documents consistent. If a member's change disagrees with another document (a feature name, a number, a decision), say so.
 6. Say what is not done. Label anything unbuilt or untested as such. Never describe a feature as existing unless it is implemented and tested.
-7. Sprint 1 has no application code. Code starts in Sprint 2, after the instructor's feedback on Assignment 1.
+7. Sprint 1 has no feature code. Course Phase 1 asks for the development environment to be set up, so the repo has a starter skeleton: an empty React page and a server that only answers a health check. Features start in Sprint 2, after the instructor's feedback on Assignment 1.
 
 ## Conventions
 
