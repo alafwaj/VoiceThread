@@ -44,6 +44,7 @@ Besides the five package cards there are "Everyone" cards that all six of us do 
 | `docs/requirements.md` | User stories (Package 1), then functional and non-functional requirements (Package 2) |
 | `docs/design.md` | Technology choice, architecture diagram, database tables, and how the reply tree is stored (Package 3) |
 | `docs/wireframes/` | Wireframes of the main screens, exported from Figma (Package 4) |
+| `docs/uml/` | UML diagrams: use case, class, and sequence diagrams |
 | `docs/backlog.md` | Features for Sprints 2 and 3 in priority order (Package 5) |
 | `docs/process/` | Sprint planning minutes, stand-up log, retrospective, impediment log |
 | `docs/process/kanban/` | Board screenshots from the beginning, middle, and end of the sprint |

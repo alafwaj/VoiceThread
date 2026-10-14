@@ -88,3 +88,7 @@ To show a conversation, the server runs `SELECT * FROM posts WHERE root_post_id 
 
 - Figma file: https://www.figma.com/design/CKYiVGtwJllHe7USKXzevC/Wireframes
 - Images and notes: [docs/wireframes/](wireframes/)
+
+## 7. UML diagrams
+
+Use case, class and sequence diagrams: [docs/uml/](uml/)
