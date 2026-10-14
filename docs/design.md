@@ -1,7 +1,7 @@
 # VoiceThread — Initial Design
 
-> **Status:** sections 1 to 5 written.
-> **Owner:** Package 3 (sections 1 to 5). Package 4 adds the wireframe links in section 6.
+> **Status:** sections 1 to 7 written.
+> **Owner:** Package 3 (sections 1 to 5). Package 4 adds the wireframe links in section 6. Amin adds the UML links in section 7.
 
 ## 1. Technology choice
 

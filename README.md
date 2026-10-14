@@ -73,7 +73,7 @@ Besides the five package cards there are "Everyone" cards that all six of us do 
 | `server/` | The API server: Node.js with Express. For now one health check route |
 | `shared/` | Code both sides use, such as recording length limits. Empty until Sprint 2 |
 
-The files in `docs/` already have their headings, with a short note under each one saying what goes there.
+Each document starts with a short note saying who owns it and how far along it is.
 
 ## How we work
 
