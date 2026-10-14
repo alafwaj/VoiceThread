@@ -45,7 +45,7 @@ Besides the five package cards there are "Everyone" cards that all six of us do 
 | `docs/design.md` | Technology choice, architecture diagram, database tables, and how the reply tree is stored (Package 3) |
 | `docs/wireframes/` | Wireframes of the main screens, exported from Figma (Package 4) |
 | `docs/backlog.md` | Features for Sprints 2 and 3 in priority order (Package 5) |
-| `docs/process/` | Sprint planning minutes, stand-up log, retrospective, impediment log |
+| `docs/process/` | Sprint planning minutes, stand-up log, impediment log |
 | `docs/process/kanban/` | Board screenshots from the beginning, middle, and end of the sprint |
 | `client/`, `server/`, `shared/` | Frontend code, backend code, and code both sides use. Empty until Sprint 2 |
 
@@ -76,7 +76,7 @@ The course allows AI tools. Use them to explain things, check your draft, or sug
 | 2 | November 13, 2026 | Core features working |
 | 3 | December 7, 2026 | Extra features, testing, documentation, presentation |
 
-Each sprint needs a planning meeting, at least two stand-ups a week (eight or more in total), and a retrospective. All of them get written up in `docs/process/`.
+Each sprint needs a planning meeting, at least two stand-ups a week (eight or more in total), and a retrospective. The planning minutes, stand-ups and impediments are written up in `docs/process/`. The retrospective is submitted as its own PDF, not kept in the repo.
 
 ## Tech we plan to use
 
