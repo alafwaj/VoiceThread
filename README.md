@@ -13,7 +13,7 @@ We are at the end of Sprint 1: requirements, the first design, and getting used 
 | Amin | Team leader, reviewer, and Scrum Master for Sprint 1 (runs the meetings and keeps the process records) |
 | Yousif | Package 1: user stories |
 | Omar | Package 2: functional and non-functional requirements |
-| Yagoob | Package 3: architecture and initial design |
+| Yaqoob | Package 3: architecture and initial design |
 | Rayyan | Package 4: wireframes |
 | Layla | Package 5: product backlog and sprint plan |
 
