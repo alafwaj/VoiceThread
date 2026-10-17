@@ -1,7 +1,7 @@
 # VoiceThread — Requirements
 
-> **Status:** sections 1 to 7 drafted. Not yet reviewed by the instructor.
-> **Owners:** Package 1 writes sections 1 to 3. Package 2 writes sections 4 to 7.
+> **Status:** sections 1 to 6 drafted. Not yet reviewed by the instructor.
+> **Owners:** Package 1 writes sections 1 to 3. Package 2 writes sections 4 to 6.
 
 ## 1. Product overview
 
@@ -232,13 +232,3 @@ The project brief lists advanced features that would take far more than one seme
 | NFR-06 | Reliability | No reply is ever saved without a valid parent post, and a failed upload leaves no half-saved post or orphaned audio file. |
 | NFR-07 | Compatibility | Every feature works in the current versions of Chrome and Edge on Windows. |
 | NFR-08 | Maintainability | A team member who has not seen the project can get it running on their own computer in under 15 minutes by following the README. |
-
-## 7. Open questions
-
-Questions for the instructor (Product Owner). They have not been sent yet.
-
-1. The rubric was written for a task app and mentions a "task completion toggle and prioritization". We plan to read this as bookmark and follow toggles, with the Home feed putting followed users first as prioritization. Is that acceptable?
-2. For "local storage integration", we plan to keep accounts, posts, and audio in a database and files on the computer running the app. Does that count, or do you want the browser's local storage used as well?
-3. Does full marks require any of the brief's advanced features, or is the foundation plus the conversation tree enough?
-4. The brief gives 2 to 5 minutes as the post length in one place and 30 seconds to 5 minutes in another. We have used 30 seconds to 5 minutes for both original posts and replies (FR-10, FR-14). Is that right?
-5. Can we demonstrate the app running locally on a laptop rather than hosted online?
