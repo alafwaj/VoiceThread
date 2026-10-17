@@ -86,12 +86,6 @@ The review checks four things:
 - it agrees with the other documents (same feature names, same numbers)
 - another member could explain it after reading it
 
-## The reference repo and AI tools
-
-There is an older version of this project, drafted with AI, in a separate private repo called `VoiceThread-Reference`. Read it to understand the project or to check your work, but don't copy files or paragraphs from it. Write your own version. It can be much shorter.
-
-The course allows AI tools. Use them to explain things, check your draft, or suggest improvements. You have to be able to explain everything you commit.
-
 ## Sprints
 
 | Sprint | Ends | Goal |
