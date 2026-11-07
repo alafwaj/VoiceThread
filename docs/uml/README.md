@@ -7,7 +7,7 @@ These diagrams describe the planned design. Nothing in them is built yet. They a
 | Diagram | File | What it shows | Covers |
 |---|---|---|---|
 | Use case | [use-case.md](use-case.md) | Who uses the app and what they can do | US-01 to US-12 |
-| Class | [class.md](class.md) | The six kinds of stored data and how they link, including the conversation tree | Design sections 3 and 4 |
+| Class | [class.md](class.md) | The stored data with its methods, the Report class, the conversation tree (TreeNode), and every service and repository on the API server | Design sections 3 and 4, FR-01 to FR-25 |
 | Sequence: publish an original post | [sequence-create-post.md](sequence-create-post.md) | Recording, the checks, and saving the audio and the post | US-03, US-04, FR-06 to FR-10 |
 | Sequence: reply with voice | [sequence-reply.md](sequence-reply.md) | How a reply is checked and linked to the post it answers | US-07, FR-09, FR-10, FR-14 |
 | Sequence: load a thread | [sequence-load-thread.md](sequence-load-thread.md) | How a whole conversation is loaded, built into a tree, and played | US-08, FR-15, FR-16, FR-18, FR-23 |
