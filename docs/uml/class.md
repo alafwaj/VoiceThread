@@ -66,6 +66,17 @@ classDiagram
         +text name
     }
 
+    class Report {
+        +int id
+        +int post_id
+        -int reporter_id
+        +text reason
+        +text status
+        +datetime created_at
+        +datetime resolved_at
+        +resolve()
+    }
+
     User "1" -- "0..*" Follow : follower_id
     User "1" -- "0..*" Follow : followed_user_id
     User "1" --> "0..*" Post : records
@@ -74,6 +85,8 @@ classDiagram
     Post "1" -- "0..*" Bookmark : is saved in
     Post "1" -- "0..3" PostTopic : is tagged with
     Topic "1" -- "0..*" PostTopic : is used in
+    User "1" -- "0..*" Report : files
+    Post "1" -- "0..*" Report : is reported in
 
     note for Post "parent_post_id: the post this one answers (empty for an original post)<br>root_post_id: the original post of the conversation"
 ```
@@ -88,6 +101,7 @@ classDiagram
 | PostTopic | Links an original post to one of its topics | `post_id` and `topic_id` together | An original post has 1 to 3 rows and a reply has none (FR-09). |
 | Follow | One user following another | `follower_id` and `followed_user_id` together | A user cannot follow themselves, so the two ids are never equal (FR-20). |
 | Bookmark | A post a user has saved | `user_id` and `post_id` together | Only the user who saved it can see or remove it (FR-22, US-12). |
+| Report | One user reporting one post, for the team to review by hand | `id` | Stores what the `/reports` route receives. `reason` is the user's written reason, and `status` is `open` until the team handles it, then `resolved` with `resolved_at` set. `id` is the report's ticket number. Reporting is a Sprint 3 extra (backlog B-20), not a core FR. |
 
 ## The methods
 
@@ -102,10 +116,12 @@ The methods on the data classes say what each kind of object can do. On the serv
 | `Post.reply(audio, authorId)` | Creates a reply with `parent_post_id` set to this post and `root_post_id` set to this post's root. Refused if this post has been deleted. | FR-14 |
 | `Post.markDeleted()` | Sets `is_deleted`. The row stays as a "post deleted" marker so its replies keep their place, and the audio file is removed. | FR-11, FR-18 |
 | `Post.isOriginal()` | True when `parent_post_id` is empty, so the post starts a conversation. | FR-09, FR-21 |
+| `Report.resolve()` | Marks the report as handled by the team. | B-20 (extra) |
 
 ## Privacy
 
 - `email` and `password_hash` are private. The email is only used to log in and is never shown on a profile or in a post. Only a hash of the password is stored, never the password itself (FR-01, NFR-04).
+- `Report.reporter_id` is private. The author of a reported post never sees who reported it, so users can report without fear of retaliation.
 
 ## How the conversation tree appears here
 
