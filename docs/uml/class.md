@@ -77,6 +77,35 @@ classDiagram
         +resolve()
     }
 
+    class TreeNode {
+        +Post post
+        +TreeNode[] children
+        +bool collapsed
+        +addChild(node)
+        +collapse()
+        +expand()
+        +replyCount() int
+        +hiddenCount() int
+    }
+
+    class PostService {
+        +publish(authorId, audio, title, description, topicIds) Post
+        +reply(parentId, authorId, audio) Post
+        +deletePost(postId, userId)
+        +getThread(rootId) TreeNode
+        +getFeed(userId, page) Post[]
+        -checkRecording(audio)
+    }
+
+    class PostRepository {
+        +findById(id) Post
+        +save(post) Post
+        +getThread(rootId) Post[]
+        +findFeed(userId, page) Post[]
+        +findByAuthor(userId) Post[]
+        +findByTopic(topicId) Post[]
+    }
+
     User "1" -- "0..*" Follow : follower_id
     User "1" -- "0..*" Follow : followed_user_id
     User "1" --> "0..*" Post : records
@@ -87,6 +116,11 @@ classDiagram
     Topic "1" -- "0..*" PostTopic : is used in
     User "1" -- "0..*" Report : files
     Post "1" -- "0..*" Report : is reported in
+    TreeNode "0..*" --> "1" Post : holds
+    TreeNode "1" o-- "0..*" TreeNode : children
+    PostService ..> PostRepository : uses
+    PostService ..> TreeNode : builds
+    PostRepository ..> Post : loads and saves
 
     note for Post "parent_post_id: the post this one answers (empty for an original post)<br>root_post_id: the original post of the conversation"
 ```
@@ -102,6 +136,9 @@ classDiagram
 | Follow | One user following another | `follower_id` and `followed_user_id` together | A user cannot follow themselves, so the two ids are never equal (FR-20). |
 | Bookmark | A post a user has saved | `user_id` and `post_id` together | Only the user who saved it can see or remove it (FR-22, US-12). |
 | Report | One user reporting one post, for the team to review by hand | `id` | Stores what the `/reports` route receives. `reason` is the user's written reason, and `status` is `open` until the team handles it, then `resolved` with `resolved_at` set. `id` is the report's ticket number. Reporting is a Sprint 3 extra (backlog B-20), not a core FR. |
+| TreeNode | One post in a loaded conversation, with the replies under it | (not stored) | Built in memory when a thread is opened, never saved. It is how the thread page collapses and expands branches (FR-15, FR-17). This is the Composite pattern in `docs/architecture/patterns.md`. |
+| PostService | The server logic for posts | (not stored) | Checks the rules before anything is saved, for example the recording rules (FR-10) and that only the author can delete a post (FR-11). |
+| PostRepository | Loads and saves posts in the database | (not stored) | The only class that reads or writes the Post table. This is the Repository pattern in `docs/architecture/patterns.md`. |
 
 ## The methods
 
@@ -117,6 +154,16 @@ The methods on the data classes say what each kind of object can do. On the serv
 | `Post.markDeleted()` | Sets `is_deleted`. The row stays as a "post deleted" marker so its replies keep their place, and the audio file is removed. | FR-11, FR-18 |
 | `Post.isOriginal()` | True when `parent_post_id` is empty, so the post starts a conversation. | FR-09, FR-21 |
 | `Report.resolve()` | Marks the report as handled by the team. | B-20 (extra) |
+| `TreeNode.addChild(node)` | Puts a reply under the post it answers while the tree is built. | FR-15 |
+| `TreeNode.collapse()` | Hides every reply under this post. | FR-17 |
+| `TreeNode.expand()` | Shows the replies again. | FR-17 |
+| `TreeNode.replyCount()` | Counts the direct replies, shown on each post. | FR-16 |
+| `TreeNode.hiddenCount()` | Counts every reply under this post, shown when the branch is collapsed. | FR-17 |
+| `PostRepository.getThread(rootId)` | Loads every post with that `root_post_id` in one query. | FR-15 |
+| `PostRepository.save(post)` | Saves a new or changed post, so it survives a restart. | FR-24 |
+| `PostRepository.findById(id)` | Loads one post, for example the post being answered. | FR-14 |
+| `PostService.getThread(rootId)` | Loads the posts through `PostRepository.getThread` and builds them into `TreeNode`s. | FR-15 |
+| `PostService.publish(...)` and `PostService.reply(...)` | Check the recording with `checkRecording` before saving it. | FR-09, FR-10, FR-14 |
 
 ## Privacy
 
@@ -129,6 +176,7 @@ The tree is stored in the Post class itself, as section 4 of the design explains
 
 - `parent_post_id` is the post this one answers. It is empty for an original post, so a post has 0 or 1 parent. A post can be answered by any number of replies, so it has 0 or more of them. The loop's label gives both numbers.
 - `root_post_id` is the original post of the conversation. An original post stores its own `id` here. Every post in the conversation stores the same value, so the whole conversation can be loaded with one query. It is a second link from Post to Post, explained in the yellow note rather than drawn as a second loop, to keep the diagram readable.
+- When a thread is opened, `PostService.getThread` loads those posts and builds a `TreeNode` for each one, with its replies as children. The database stores the tree as links, and `TreeNode` is the same tree in memory, ready to collapse and expand.
 
 `is_deleted` is how a deleted post stays in the tree as a "post deleted" marker, so the replies under it keep their place (FR-18).
 
@@ -138,3 +186,4 @@ The tree is stored in the Post class itself, as section 4 of the design explains
 - The label on a line says what the link means. Where the label is a field name, that field makes the link.
 - Fields ending in `_id` hold the `id` of a row in another class. In the database these become foreign keys.
 - Reply counts and follower counts are not stored. They are counted from Post and Follow when a page needs them.
+- A dashed arrow means one class uses another. The white diamond on TreeNode means a node holds other nodes as its children.
