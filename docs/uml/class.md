@@ -6,6 +6,7 @@ The data classes and their fields are the tables in section 3 of `docs/design.md
 
 `+` means public and `-` means private. This is the planned design. Nothing in it is built yet.
 
+![Class diagram: data model and conversation tree](class.png)
 
 ## 1. Data model and conversation tree
 
@@ -169,6 +170,7 @@ The methods on the data classes say what each kind of object can do. On the serv
 
 The API server has one service for each route group in the component diagram, and one repository for each kind of stored data. A service holds the rules. A repository is the only place that reads or writes its table or folder. The dashed arrows mean "uses".
 
+![Class diagram: services and repositories](class-services.png)
 
 ```mermaid
 classDiagram
