@@ -1,6 +1,6 @@
 # Class diagram
 
-This diagram shows the data VoiceThread stores, how the pieces link, and what each kind of object can do.
+This file has two class diagrams. The first shows the data VoiceThread stores, how the pieces link, and the classes that load a conversation and build it into a tree. The second lists every service and repository on the API server, with the names the component diagram (`component.md`) and the sequence diagrams use.
 
 The data classes and their fields are the tables in section 3 of `docs/design.md`, with the same names. The types are the simple kinds of value each field holds. The exact SQLite column types are chosen when the database is built (backlog item B-01).
 
@@ -164,6 +164,142 @@ The methods on the data classes say what each kind of object can do. On the serv
 | `PostRepository.findById(id)` | Loads one post, for example the post being answered. | FR-14 |
 | `PostService.getThread(rootId)` | Loads the posts through `PostRepository.getThread` and builds them into `TreeNode`s. | FR-15 |
 | `PostService.publish(...)` and `PostService.reply(...)` | Check the recording with `checkRecording` before saving it. | FR-09, FR-10, FR-14 |
+
+## 2. Services and repositories
+
+The API server has one service for each route group in the component diagram, and one repository for each kind of stored data. A service holds the rules. A repository is the only place that reads or writes its table or folder. The dashed arrows mean "uses".
+
+
+```mermaid
+classDiagram
+    direction LR
+
+    class AuthService {
+        +register(username, email, password)
+        +login(usernameOrEmail, password)
+        +logout(sessionId)
+    }
+
+    class UserService {
+        +getProfile(userId)
+        +getUserPosts(userId)
+        +updateProfile(userId, displayName, photo, bio)
+    }
+
+    class FollowService {
+        +follow(followerId, followedUserId)
+        +unfollow(followerId, followedUserId)
+    }
+
+    class PostService {
+        +publish(authorId, audio, title, description, topicIds)
+        +reply(parentId, authorId, audio)
+        +deletePost(postId, userId)
+        +getThread(rootId)
+        +getFeed(userId, page)
+        +getAudio(postId)
+    }
+
+    class TopicService {
+        +listTopics()
+        +getTopicPosts(topicId)
+    }
+
+    class BookmarkService {
+        +addBookmark(userId, postId)
+        +removeBookmark(userId, postId)
+        +listBookmarks(userId)
+    }
+
+    class ReportService {
+        +reportPost(postId, reporterId, reason)
+        +listOpenReports()
+        +resolveReport(reportId)
+    }
+
+    class UserRepository {
+        +findById(id)
+        +findByUsernameOrEmail(value)
+        +save(user)
+    }
+
+    class FollowRepository {
+        +add(followerId, followedUserId)
+        +remove(followerId, followedUserId)
+        +findFollowedIds(userId)
+        +countFollowers(userId)
+        +countFollowing(userId)
+    }
+
+    class PostRepository {
+        +findById(id)
+        +save(post)
+        +getThread(rootId)
+        +findFeed(userId, page)
+        +findByAuthor(userId)
+        +findByTopic(topicId)
+    }
+
+    class AudioRepository {
+        +saveFile(audio)
+        +deleteFile(fileName)
+        +openFile(fileName)
+    }
+
+    class TopicRepository {
+        +findAll()
+        +findById(id)
+        +setPostTopics(postId, topicIds)
+    }
+
+    class BookmarkRepository {
+        +add(userId, postId)
+        +remove(userId, postId)
+        +findByUser(userId)
+    }
+
+    class ReportRepository {
+        +save(report)
+        +findOpen()
+        +markResolved(reportId)
+    }
+
+    AuthService ..> UserRepository
+    UserService ..> UserRepository
+    UserService ..> FollowRepository
+    UserService ..> PostRepository
+    FollowService ..> FollowRepository
+    FollowService ..> UserRepository
+    PostService ..> PostRepository
+    PostService ..> AudioRepository
+    PostService ..> TopicRepository
+    TopicService ..> TopicRepository
+    TopicService ..> PostRepository
+    BookmarkService ..> BookmarkRepository
+    BookmarkService ..> PostRepository
+    ReportService ..> ReportRepository
+    ReportService ..> PostRepository
+```
+
+| Service | Route group | Uses | Requirements |
+|---|---|---|---|
+| AuthService | `/auth` | UserRepository | FR-01, FR-02, FR-03 |
+| UserService | `/users` | UserRepository, PostRepository, FollowRepository | FR-04, FR-05 |
+| PostService | `/posts` | PostRepository, TopicRepository, AudioRepository | FR-06 to FR-18, FR-21, FR-23, FR-25 |
+| TopicService | `/topics` | TopicRepository, PostRepository | FR-19 |
+| FollowService | `/follows` | FollowRepository, UserRepository | FR-20 |
+| BookmarkService | `/bookmarks` | BookmarkRepository, PostRepository | FR-22 |
+| ReportService | `/reports` | ReportRepository, PostRepository | B-20 (extra) |
+
+| Repository | Reads and writes | Notes |
+|---|---|---|
+| UserRepository | User | Logging in looks a user up by username or email (FR-02). |
+| PostRepository | Post | Also used by the profile, topic and bookmark pages to list posts. |
+| TopicRepository | Topic and PostTopic | PostTopic only links posts to topics, so it has no repository of its own. |
+| FollowRepository | Follow | Follower and following counts are counted here, not stored (FR-04). |
+| BookmarkRepository | Bookmark | Always filtered by the logged-in user (FR-22). |
+| ReportRepository | Report | Only the team reads reports. |
+| AudioRepository | The audio folder | Saves, opens and deletes audio files. Deleting a post deletes its file (FR-18). |
 
 ## Privacy
 
