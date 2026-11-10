@@ -4,7 +4,7 @@ VoiceThread is an audio-first social network. You record a short voice post and 
 
 This is Project 3 for SWEN 360 / CMPE 460 (Software Design and Engineering) at the American University of Bahrain, Fall 2026.
 
-We are at the end of Sprint 1: requirements, the first design, and getting used to working as an agile team. Assignment 1 was submitted on October 13, 2026, and Course Phase 1 is due October 16, 2026. The development environment is set up, but the app has no features yet. They start in Sprint 2.
+We are in Sprint 2, which ends on November 13, 2026. Assignment 1 was submitted on October 13, 2026. Sprint 2 so far is the detailed design for Assignment 2: the architecture analysis, the class, component and sequence diagrams, high-fidelity wireframes and the ethical design statement. The development environment is set up, but the app has no features yet.
 
 ## Team
 
@@ -62,12 +62,17 @@ Besides the five package cards there are "Everyone" cards that all six of us do 
 |---|---|
 | `CONTRIBUTING.md` | Git steps: clone, branch, commit, pull request |
 | `docs/requirements.md` | User stories (Package 1), then functional and non-functional requirements (Package 2) |
-| `docs/design.md` | Technology choice, architecture diagram, database tables, and how the reply tree is stored (Package 3) |
+| `docs/design.md` | Technology choice, architecture diagram, database tables, and how the reply tree is stored (Package 3). Section 8 links the Sprint 2 design |
 | `docs/wireframes/` | Wireframes of the main screens, exported from Figma (Package 4) |
-| `docs/uml/` | UML diagrams: use case, class, and sequence diagrams |
+| `docs/uml/` | UML diagrams: use case, class, component, and sequence diagrams |
+| `docs/architecture/` | Sprint 2 architecture analysis report and design patterns |
+| `docs/ethics/` | Sprint 2 ethical design statement |
+| `docs/individual/` | Each member's Part 2 individual report for Assignment 2 |
+| `docs/submission/` | The shared Part 1 PDF for Assignment 2 |
 | `docs/backlog.md` | Features for Sprints 2 and 3 in priority order (Package 5) |
 | `docs/process/` | Sprint planning minutes, stand-up log, impediment log |
-| `docs/process/kanban/` | Board screenshots from the beginning, middle, and end of the sprint |
+| `docs/process/kanban/` | Sprint 1 board screenshots from the beginning, middle, and end of the sprint |
+| `docs/process/sprint-2/` | Sprint 2 planning, stand-ups, impediments, velocity, burndown, board screenshots and the consistency check |
 | `package.json` | Lists the two halves of the app and the `npm run dev` command that starts both |
 | `client/` | The interface: React, set up with Vite. For now one placeholder page |
 | `server/` | The API server: Node.js with Express. For now one health check route |

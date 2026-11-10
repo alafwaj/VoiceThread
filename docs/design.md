@@ -1,6 +1,6 @@
 # VoiceThread — Initial Design
 
-> **Status:** sections 1 to 7 written.
+> **Status:** sections 1 to 7 written in Sprint 1. Section 8 (Sprint 2) added.
 > **Owner:** Package 3 (sections 1 to 5). Package 4 adds the wireframe links in section 6. Amin adds the UML links in section 7.
 
 ## 1. Technology choice
@@ -92,3 +92,27 @@ To show a conversation, the server runs `SELECT * FROM posts WHERE root_post_id 
 ## 7. UML diagrams
 
 Use case, class and sequence diagrams: [docs/uml/](uml/)
+
+## 8. Sprint 2 design
+
+Sprint 2 adds the detailed design. This section links every Sprint 2 design document, so this file stays the single place to start reading the design. Sections 1 to 7 are the Sprint 1 design and are unchanged. This is the planned design. Nothing in it is built yet.
+
+### 8.1 Sprint 2 documents
+
+| Document | File | What it shows | Status |
+|---|---|---|---|
+| Class diagram | [uml/class.md](uml/class.md) | The stored data with its methods, the conversation tree (TreeNode), and every service and repository on the API server | Merged |
+| Component diagram | [uml/component.md](uml/component.md) | The pages, the route groups they call, the login check, the services, the repositories, and where data and audio are stored | In review |
+| Sequence diagram: reply with voice | [uml/sequence-reply.md](uml/sequence-reply.md) | The reply flow redrawn with the controller, service and repository names from the class diagram | Not merged yet |
+| Architecture analysis | [architecture/architecture-analysis.md](architecture/architecture-analysis.md) | The architecture styles compared, the decision matrix, and the final choice | Not merged yet |
+| Design patterns | [architecture/patterns.md](architecture/patterns.md) | The Repository and Composite patterns and the features they serve | Not merged yet |
+
+### 8.2 Data added in Sprint 2
+
+The class diagram adds one field to User and two new kinds of stored data. They extend the tables in section 3, with the same names as in `uml/class.md`.
+
+| Item | Key fields | Notes |
+|---|---|---|
+| **User** (new field) | role | `member` for everyone, or `moderator` for the team members who review reports. It is set by a setup script, so there is no screen for changing it. |
+| **Session** | id, user_id, created_at, expires_at | One logged-in browser. Created when a user logs in and deleted when they log out (FR-02, FR-03). The `id` is a long random value kept in a cookie, so the user stays logged in after a refresh until they log out or the session expires. |
+| **Report** | id, post_id, reporter_id, reason, status, resolved_by, created_at, resolved_at | One user reporting one post, for the team to review by hand. `status` is `open` until a moderator handles it, then `resolved`. `reporter_id` is never shown to the author of the post. Reporting is a Sprint 3 extra (backlog B-20), not a core FR. |
