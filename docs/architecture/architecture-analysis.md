@@ -61,3 +61,39 @@ Each style is scored from 1 (poor) to 5 (excellent) on each criterion. Weights a
 Example: layered scores 0.15 x 3 + 0.25 x 4 + 0.30 x 5 + 0.30 x 5 = 4.45.
 
 **Does the result depend on the weights?** We also tested another totally different weighting where scalability was given 40%, while the other three were each given 20%. This resulted in the following totals: layered 4.0, MVC 3.4 and microservices 3.0. In this case, too, the layered client-server architecture prevails.
+
+## 5. Final choice and justification
+
+**We choose a layered client-server architecture**, as already described in section 2 of the design document.
+
+![Layered architecture of VoiceThread](layered-architecture.png)
+
+| Layer | Responsibility | Examples |
+|---|---|---|
+| Presentation | Screens in the browser. It talks only to the API. | Feed, Thread, Recorder, Player, Profile, Topics, Bookmarks |
+| API | Receives requests, checks that the user is logged in and owns the data. | auth, posts, topics, follows, bookmarks routes |
+| Service | The business rules. | Recording checks (FR-10), reply rules (FR-14), delete rules (FR-18), feed order (FR-21) |
+| Data access | Reads and writes storage. | PostRepository, UserRepository |
+| Storage | Keeps the data. | SQLite database, audio folder |
+
+Why it fits VoiceThread:
+
+- **Security (NFR-04, FR-11):** the API layer is the only place where the check for login and ownership takes place, therefore an external request cannot circumvent it.
+- **Validation (FR-10):** the recording rules exist once in the service layer and apply both to original postings and replies (US-04, US-07).
+- **The conversation tree (US-08, FR-15):** the repository loads all the postings of a thread in a single query and the service layer constructs the tree and returns it to the browser.
+- **Reliability (NFR-06, FR-24):** the service layer stores the audio file first and the database entry second, and deletes the file in case the second operation fails, which ensures that no reply is stored without its parent and audio is not orphaned.
+- **The team and setup (NFR-08):** One language, one repository, one start command. The frontend, API and data access layers can be distributed among six developers without blocking each other.
+## 6. Design patterns mapped to features
+
+| Pattern | Feature | Where it appears |
+|---|---|---|
+| Repository | Loading and saving posts (FR-15, FR-24) | `PostRepository.getThread(rootId)` runs the single query on `root_post_id`, and `PostRepository.save(post)` stores a post. The services never write SQL, so the storage can change later. |
+| Composite | The conversation tree and collapsing a branch (FR-15, FR-17) | A `TreeNode` holds a post and its replies. `collapse()` and `expand()` work the same way on a single reply and on a whole branch. |
+
+The full mapping, with class sketches, is in `docs/architecture/patterns.md`.
+
+## 7. Trade-offs we accept
+
+- SQLite is single-writer and runs on a single machine. This will be sufficient for local demonstrations and we make no claims to scalability.
+- Audio is stored in a folder on the disk without the use of a CDN and any kind of audio processing. The list of advanced features the team did not choose to implement includes both.
+- Should the application have needed to support a large number of users, the replacement of the database would take place at the repository layer while the audio folder would be moved to cloud storage.
