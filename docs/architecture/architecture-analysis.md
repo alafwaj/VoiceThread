@@ -35,3 +35,12 @@ Microservices is an architecture where an application is divided into small, ind
 Services can be built using different programming languages and frameworks.
 Each microservice is loosely coupled and can be developed, deployed, and scaled independently.
 
+
+## 3. Comparison
+
+| Criterion | Layered client-server | MVC | Microservices |
+|---|---|---|---|
+| Scalability | Scales using a larger machine. The repositories abstract away the storage, meaning that SQLite and the audio folder could be swapped out with PostgreSQL and cloud storage respectively without affecting the rest. Much more than a class demo requires. | The same as layered: one application, scaling as a whole. | Best. The audio service could scale separately. Much more than a local demo with few users requires. |
+| Security | Single entry point (API). Authentication and authorization are done only once, in the API layer, for all requests (NFR-04, FR-11). | Checks are often done in individual controllers, meaning that one overlooked check opens a security flaw. | Greatest potential attack surface: every service requires its own protection and services need to trust each other. |
+| Maintainability | Each layer does a single job and thus is testable on its own. The folder structure is structured according to the layers, hence, making it easy for new team members to locate the source code. | Very familiar and simple yet controllers become quite large and blend request handling with rules. | Services can evolve separately; however, one feature uses many services which makes debugging difficult and keeping data consistent across many services is difficult (NFR-06). |
+| Team suitability (six students, one semester) | JavaScript throughout, one repository, one command to start application and the work separates naturally based on layers. Satisfies NFR-08. | Very easy to learn and very suitable with React and Express. | Infeasible. Many services to develop, deploy, start; setup in 15 min is unrealistic (NFR-08). |
