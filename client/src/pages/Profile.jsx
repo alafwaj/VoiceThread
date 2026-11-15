@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api.js';
 import { linkTo } from '../router.js';
 import Avatar from '../components/Avatar.jsx';
+import { BackIcon } from '../components/Icons.jsx';
 import { useToast } from '../components/Toast.jsx';
 import PostList from './PostList.jsx';
 
-function EditProfile({ user, onSaved, onCancel }) {
+export function EditProfile({ user, onSaved, onCancel }) {
   const [displayName, setDisplayName] = useState(user.displayName);
   const [bio, setBio] = useState(user.bio || '');
   const [photo, setPhoto] = useState(null);
@@ -61,7 +62,6 @@ export default function Profile({ userId, me, onMeChange, onLogout }) {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState('');
-  const [editing, setEditing] = useState(false);
 
   const load = useCallback(() => {
     setError('');
@@ -72,7 +72,6 @@ export default function Profile({ userId, me, onMeChange, onLogout }) {
   useEffect(() => {
     setUser(null);
     setPosts(null);
-    setEditing(false);
     load();
   }, [load]);
 
@@ -101,11 +100,13 @@ export default function Profile({ userId, me, onMeChange, onLogout }) {
 
   return (
     <section>
+      {!user.isMe && (
+        <button type="button" className="icon-btn profile-back" onClick={() => window.history.back()} aria-label="Go back"><BackIcon /></button>
+      )}
       <div className="profile-head">
         <Avatar user={user} size={84} />
         <div className="profile-info">
           <h1 className="profile-name">{user.displayName}</h1>
-          <p className="muted small">@{user.username}{user.role === 'moderator' ? ' · Moderator' : ''}</p>
           <p className="counts">
             <a href={linkTo(`/profile/${user.id}/followers`)}><strong>{user.followers}</strong> {user.followers === 1 ? 'Follower' : 'Followers'}</a>
             <a href={linkTo(`/profile/${user.id}/following`)}><strong>{user.following}</strong> Following</a>
@@ -117,7 +118,7 @@ export default function Profile({ userId, me, onMeChange, onLogout }) {
       {user.isMe ? (
         <div className="pill-row">
           <button type="button" className="pill" onClick={shareProfile}>Share profile</button>
-          <button type="button" className="pill" onClick={() => setEditing(!editing)} aria-expanded={editing}>Edit Profile</button>
+          <a className="pill" href={linkTo('/settings/profile')}>Edit Profile</a>
         </div>
       ) : user.isFollowing ? (
         <div className="pill-row">
@@ -127,21 +128,7 @@ export default function Profile({ userId, me, onMeChange, onLogout }) {
       ) : (
         <button type="button" className="btn btn-primary btn-follow" onClick={toggleFollow} aria-pressed="false">Follow</button>
       )}
-      {user.isMe && (
-        <p className="profile-links">
-          {me.role === 'moderator' && <a href={linkTo('/reports')}>Review reports</a>}
-          <button type="button" className="link-btn" onClick={onLogout}>Log out</button>
-        </p>
-      )}
 
-      {editing && (
-        <EditProfile user={user} onCancel={() => setEditing(false)} onSaved={(u) => {
-          setEditing(false);
-          onMeChange(u);
-          toast('Profile saved');
-          load();
-        }} />
-      )}
 
       <h2 className="tab-title"><span>Posts</span></h2>
       <PostList posts={posts} me={me} onDeleted={(id) => setPosts(posts.filter((p) => p.id !== id))}

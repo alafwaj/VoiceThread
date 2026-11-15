@@ -10,7 +10,10 @@ const SELECT = `
          (SELECT COUNT(*) FROM posts c WHERE c.parent_post_id = p.id) AS reply_count,
          (SELECT group_concat(t.id || ':' || t.name, '|') FROM post_topics pt JOIN topics t ON t.id = pt.topic_id
             WHERE pt.post_id = p.id) AS topic_list,
-         EXISTS (SELECT 1 FROM bookmarks b WHERE b.post_id = p.id AND b.user_id = :viewer) AS bookmarked
+         EXISTS (SELECT 1 FROM bookmarks b WHERE b.post_id = p.id AND b.user_id = :viewer) AS bookmarked,
+         (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) AS like_count,
+         EXISTS (SELECT 1 FROM likes l WHERE l.post_id = p.id AND l.user_id = :viewer) AS liked,
+         p.listen_count
   FROM posts p JOIN users u ON u.id = p.author_id`;
 
 const PAGE_SIZE = 20; // NFR-05: a feed page has 20 posts
@@ -30,6 +33,9 @@ function shape(row) {
     isDeleted: deleted,
     replyCount: row.reply_count,
     bookmarked: Boolean(row.bookmarked),
+    likeCount: deleted ? 0 : row.like_count,
+    liked: Boolean(row.liked),
+    listenCount: deleted ? 0 : row.listen_count,
     author: deleted
       ? null
       : { id: row.author_id, username: row.author_username, displayName: row.author_display_name, photo: row.author_photo },
@@ -92,6 +98,17 @@ export const PostRepository = {
       .prepare(`${SELECT} JOIN post_topics pt ON pt.post_id = p.id
                 WHERE pt.topic_id = :topic AND p.is_deleted = 0 ORDER BY p.created_at DESC, p.id DESC`)
       .all({ topic: topicId, viewer: viewerId })
+      .map(shape);
+  },
+  addListen(id) {
+    db.prepare('UPDATE posts SET listen_count = listen_count + 1 WHERE id = ? AND is_deleted = 0').run(id);
+  },
+  // Search: original posts whose title matches, newest first.
+  searchByTitle(text, viewerId = 0) {
+    return db
+      .prepare(`${SELECT} WHERE p.parent_post_id IS NULL AND p.is_deleted = 0 AND p.title LIKE :q ESCAPE '\\'
+                ORDER BY p.created_at DESC, p.id DESC LIMIT 20`)
+      .all({ q: text, viewer: viewerId })
       .map(shape);
   },
   // FR-22: the user's bookmarks, most recently added first.

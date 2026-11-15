@@ -4,6 +4,7 @@ import { AudioRepository } from '../repositories/AudioRepository.js';
 import { TopicRepository } from '../repositories/TopicRepository.js';
 import { BookmarkRepository } from '../repositories/BookmarkRepository.js';
 import { ReportRepository } from '../repositories/ReportRepository.js';
+import { LikeRepository } from '../repositories/LikeRepository.js';
 import { transaction } from '../db.js';
 import { AppError } from '../errors.js';
 
@@ -97,6 +98,7 @@ export const PostService = {
     transaction(() => {
       PostRepository.save({ ...post, is_deleted: 1, audio_file: null });
       BookmarkRepository.deleteByPost(postId);
+      LikeRepository.deleteByPost(postId);
       ReportRepository.closeByPost(postId);
     });
     AudioRepository.deleteFile(audioFile);
@@ -110,6 +112,25 @@ export const PostService = {
     const tree = buildTree(PostRepository.getThread(rootId, viewerId));
     if (!tree) throw new AppError(404, 'This conversation does not exist.');
     return { rootId, tree };
+  },
+
+  like(postId, userId) {
+    const post = PostRepository.findRowById(postId);
+    if (!post || post.is_deleted) throw new AppError(404, 'This post does not exist.');
+    LikeRepository.add(userId, postId);
+    return PostRepository.findById(postId, userId);
+  },
+
+  unlike(postId, userId) {
+    LikeRepository.remove(userId, postId);
+    return PostRepository.findById(postId, userId);
+  },
+
+  // Counted once each time someone starts playing a recording.
+  addListen(postId) {
+    const post = PostRepository.findRowById(postId);
+    if (!post || post.is_deleted) throw new AppError(404, 'This post does not exist.');
+    PostRepository.addListen(postId);
   },
 
   getFeed(userId, page) {

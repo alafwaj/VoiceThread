@@ -5,15 +5,21 @@
 // are not the real shape of the sound.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { formatTime } from '../api.js';
+import { SPEEDS, getAutoplay, getSpeed, setSpeed as saveSpeed } from '../settings.js';
 
-const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
-const SPEED_KEY = 'vt_speed';
 const BARS = 44;
 const PLAY_EVENT = 'vt-play'; // only one recording plays at a time
 
-function savedSpeed() {
-  const s = Number(localStorage.getItem(SPEED_KEY));
-  return SPEEDS.includes(s) ? s : 1;
+const savedSpeed = getSpeed;
+
+// Autoplay: start the next recording on the page after this one.
+function playNext(button) {
+  const buttons = [...document.querySelectorAll('.play-btn')];
+  const next = buttons[buttons.indexOf(button) + 1];
+  if (next) {
+    next.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    next.click();
+  }
 }
 
 function bars(seed) {
@@ -26,8 +32,10 @@ function bars(seed) {
   });
 }
 
-export default function Player({ src, duration, label = 'recording', seed = 1 }) {
+export default function Player({ src, duration, label = 'recording', seed = 1, onFirstPlay }) {
   const audio = useRef(null);
+  const button = useRef(null);
+  const counted = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
   const [speed, setSpeed] = useState(savedSpeed);
@@ -76,8 +84,7 @@ export default function Player({ src, duration, label = 'recording', seed = 1 })
 
   function changeSpeed(e) {
     const s = Number(e.target.value);
-    localStorage.setItem(SPEED_KEY, String(s));
-    window.dispatchEvent(new Event('vt-speed'));
+    saveSpeed(s);
     setSpeed(s);
   }
 
@@ -87,16 +94,23 @@ export default function Player({ src, duration, label = 'recording', seed = 1 })
         ref={audio}
         src={src}
         preload="none"
-        onPlay={() => setPlaying(true)}
+        onPlay={() => {
+          setPlaying(true);
+          if (!counted.current) {
+            counted.current = true;
+            onFirstPlay?.();
+          }
+        }}
         onPause={() => setPlaying(false)}
         onEnded={() => {
           setPlaying(false);
           setTime(0);
+          if (getAutoplay()) playNext(button.current);
         }}
         onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
         onError={() => setError('This recording could not be loaded.')}
       />
-      <button type="button" className="play-btn" onClick={toggle} aria-label={`${playing ? 'Pause' : 'Play'} ${label}`}>
+      <button type="button" className="play-btn" ref={button} onClick={toggle} aria-label={`${playing ? 'Pause' : 'Play'} ${label}`}>
         {playing ? (
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1" /><rect x="13.9" y="5" width="3.6" height="14" rx="1" /></svg>
         ) : (

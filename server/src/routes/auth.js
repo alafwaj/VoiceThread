@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { AuthService } from '../services/AuthService.js';
 import { publicUser } from '../services/UserService.js';
-import { COOKIE, readSessionId } from '../middleware/auth.js';
+import { COOKIE, readSessionId, requireAuth } from '../middleware/auth.js';
 import { SESSION_DAYS } from '../repositories/SessionRepository.js';
 
 export const authRoutes = Router();
@@ -36,4 +36,10 @@ authRoutes.post('/logout', (req, res) => {
 authRoutes.get('/me', (req, res) => {
   const user = AuthService.checkSession(readSessionId(req));
   res.json({ user: user ? publicUser(user) : null });
+});
+
+authRoutes.post('/password', requireAuth, (req, res) => {
+  const { currentPassword, newPassword } = req.body ?? {};
+  AuthService.changePassword(req.user.id, readSessionId(req), currentPassword, newPassword);
+  res.json({ ok: true });
 });

@@ -25,6 +25,19 @@ postRoutes.get('/:id/thread', (req, res) => {
   res.json(PostService.getThread(Number(req.params.id), req.user.id));
 });
 
+postRoutes.post('/:id/like', (req, res) => {
+  res.json({ post: PostService.like(Number(req.params.id), req.user.id) });
+});
+
+postRoutes.delete('/:id/like', (req, res) => {
+  res.json({ post: PostService.unlike(Number(req.params.id), req.user.id) });
+});
+
+postRoutes.post('/:id/listens', (req, res) => {
+  PostService.addListen(Number(req.params.id));
+  res.json({ ok: true });
+});
+
 postRoutes.delete('/:id', (req, res) => {
   PostService.deletePost(Number(req.params.id), req.user.id);
   res.json({ ok: true });

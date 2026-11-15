@@ -85,7 +85,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .check { display: flex; gap: 8px; align-items: center; }
 
 /* Layout after log in */
-.topbar { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1.5px solid var(--line); height: 64px; display: grid; place-items: center; }
+.topbar { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1.5px solid var(--line); height: 64px; display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; justify-items: center; padding: 0 6px; }
+.topbar .wordmark { justify-self: center; }
 .content { max-width: 640px; margin: 0 auto; padding: 8px 20px 110px; }
 .page-title { font-size: 1.35rem; font-weight: 700; margin: 6px 0; }
 .page-bar { display: flex; align-items: center; gap: 4px; margin: 6px 0 8px; }
@@ -183,7 +184,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .listen-back { width: 100%; max-width: 420px; }
 
 /* Profile */
-.profile-head { display: flex; align-items: center; gap: 22px; margin: 22px 0 6px; }
+.profile-head { display: flex; align-items: center; gap: 22px; margin: 30px 0 6px; }
 .profile-info { display: grid; gap: 2px; min-width: 0; }
 .profile-name { font-size: 1.5rem; font-weight: 700; overflow-wrap: anywhere; }
 .profile-bio { margin: 10px 0 0; }
@@ -196,12 +197,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* Followers and following */
 .tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1.5px solid var(--line); margin: 0 -20px 18px; }
-.tabs a { text-align: center; padding: 12px 6px; color: var(--ink); text-decoration: none; font-size: 1.05rem; }
+.tabs a { justify-self: center; text-align: center; padding: 12px 6px; color: var(--ink); text-decoration: none; font-size: 1.05rem; }
 .tabs a[aria-current='page'] { box-shadow: inset 0 -3px 0 var(--red); }
 .search { display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--line); border-radius: 999px; padding: 0 16px; height: 48px; margin-bottom: 14px; }
 .search svg { width: 22px; height: 22px; fill: none; stroke: var(--muted); stroke-width: 2; flex: none; }
 .search input { border: 0; outline: none; flex: 1; font-size: 1rem; background: transparent; min-width: 0; }
 .search:focus-within { box-shadow: var(--focus); }
+.search input:focus-visible { box-shadow: none; }
 .people { list-style: none; padding: 0; margin: 0; }
 .people li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; }
 .person { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; min-width: 0; }
@@ -225,4 +227,100 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .tabs { margin-left: -14px; margin-right: -14px; }
   .post-actions { padding-left: 0; }
   .player { gap: 8px; }
+}
+
+/* Header buttons: menu and bell */
+.bell { position: relative; color: var(--ink); }
+.bell-new::after { content: ''; position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: var(--red); border: 1.5px solid #fff; }
+
+/* Menu drawer */
+.drawer-backdrop { position: fixed; inset: 0; z-index: 45; background: rgba(20, 20, 24, 0.4); }
+.drawer { position: absolute; top: 0; bottom: 0; left: 0; width: min(300px, 82vw); background: #fff; display: flex; flex-direction: column; padding: 14px 10px; gap: 2px; box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15); }
+.drawer-head { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1.5px solid var(--line); margin-bottom: 8px; }
+.drawer-head > span { display: grid; flex: 1; min-width: 0; }
+.drawer a, .drawer-logout { display: flex; align-items: center; gap: 14px; padding: 12px 10px; border-radius: 10px; color: var(--ink); text-decoration: none; font-size: 1.02rem; border: 0; background: none; cursor: pointer; text-align: left; }
+.drawer a svg { width: 22px; height: 22px; }
+.drawer a:hover, .drawer-logout:hover { background: #f3f4f6; }
+.drawer-logout { margin-top: auto; color: var(--red-dark); font-weight: 600; }
+
+/* Likes, listens and the more menu on each post */
+.post-actions { gap: 4px; }
+.action span { font-variant-numeric: tabular-nums; }
+.action-on { color: var(--red); }
+.listens { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); font-size: 0.82rem; padding-right: 2px; font-variant-numeric: tabular-nums; }
+.listens svg { width: 17px; height: 17px; stroke-width: 1.8; }
+.more { position: relative; display: inline-flex; }
+.more-menu { position: absolute; top: 100%; left: 0; z-index: 30; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); padding: 6px; display: grid; min-width: 180px; }
+.more-menu button { display: flex; align-items: center; gap: 10px; border: 0; background: none; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 0.92rem; }
+.more-menu button:hover { background: #f3f4f6; }
+.more-menu svg { width: 18px; height: 18px; }
+.more-menu .danger { color: #a1131a; }
+
+/* Search screen */
+.search-top { display: flex; gap: 10px; align-items: center; margin: 14px 0; min-width: 0; }
+.search input[type='search']::-webkit-search-cancel-button { display: none; }
+.round-btn { width: 64px; height: 52px; flex: none; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; display: grid; place-items: center; cursor: pointer; color: var(--ink); }
+.round-btn svg { width: 30px; height: 30px; stroke-width: 1.6; }
+.search-big { flex: 1; min-width: 0; height: 52px; margin: 0; }
+.search-big svg { width: 24px; height: 24px; }
+.search-big input { font-size: 1.15rem; }
+.search-head { font-size: 1rem; margin: 16px 0 4px; color: var(--muted); font-weight: 600; }
+.activity li { justify-content: flex-start; border-bottom: 1px solid var(--line); }
+
+.profile-back { margin: 12px 0 -22px -8px; }
+
+/* Menu drawer (new Figma) */
+.drawer { border-radius: 0 22px 22px 0; padding: 26px 20px; gap: 0; }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; padding: 6px 0 24px; border-bottom: 1.5px solid #e7e9ec; margin-bottom: 12px; }
+.drawer-head > .drawer-logo { display: block; flex: none; white-space: nowrap; font-size: 1.4rem; font-weight: 800; color: var(--ink); }
+.drawer-logo span { color: var(--red); }
+.drawer-row { display: flex; align-items: center; gap: 14px; padding: 14px 2px; color: var(--ink); text-decoration: none; font-size: 1rem; border-radius: 10px; }
+.drawer-row span { flex: 1; }
+.drawer-row svg { width: 21px; height: 21px; stroke-width: 1.8; }
+.drawer-row svg:last-child { width: 18px; height: 18px; color: var(--muted); }
+.drawer-row:hover { background: #f6f6f7; }
+
+/* Default avatar */
+.avatar-default { display: inline-block; background: none; }
+
+/* Settings (new Figma) */
+body:has(.settings) { background: #fafaf8; }
+#root:has(.settings) { background: #fafaf8; }
+.content:has(.settings) { padding-top: 0; }
+.settings { padding-bottom: 20px; }
+.settings-header { display: flex; align-items: center; justify-content: space-between; height: 86px; margin: 0 -20px 6px; padding: 0 12px; border-bottom: 1.5px solid #e9ebee; background: #fafaf8; position: sticky; top: 0; z-index: 10; }
+.settings-header h1 { font-size: 1.3rem; font-weight: 700; }
+.settings-header .icon-btn { width: 48px; height: 48px; }
+.settings-header .icon-btn svg { width: 34px; height: 34px; stroke-width: 1.6; }
+.set-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #6f7582; margin: 20px 4px 10px; }
+.set-card { background: #fff; border: 1.5px solid #dfe1e6; border-radius: 16px; overflow: hidden; }
+.set-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 0 18px; color: var(--ink); text-decoration: none; font-size: 1.05rem; }
+.set-row + .set-row::before { content: ''; position: absolute; top: 0; left: 16px; right: 16px; border-top: 1px solid #eceef1; }
+a.set-row:hover, .set-select:hover { background: #fafafa; }
+.set-row > svg, .set-value svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.set-value { display: inline-flex; align-items: center; gap: 6px; color: #707684; font-size: 0.92rem; }
+.set-select select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.set-select:has(select:focus-visible) { box-shadow: inset var(--focus); }
+.set-note { font-size: 0.8rem; color: var(--muted); margin: 6px 4px 0; }
+.switch { appearance: none; -webkit-appearance: none; width: 44px; height: 26px; border-radius: 999px; background: #cfd2d8; position: relative; cursor: pointer; transition: background 0.15s; flex: none; margin: 0; }
+.switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+.switch:checked { background: var(--red); }
+.switch:checked::after { transform: translateX(18px); }
+.logout-btn { display: block; width: 100%; margin: 20px 0 0; height: 54px; border-radius: 999px; border: 1.5px solid var(--red); background: #fff; color: var(--red); font-size: 0.98rem; cursor: pointer; }
+.logout-btn:hover { background: var(--red-soft); }
+.set-form { padding: 16px; }
+.set-form .btn-block { margin-bottom: 0; }
+.set-doc { padding: 16px 18px; display: grid; gap: 10px; font-size: 0.94rem; }
+.set-doc h2 { font-size: 1rem; margin-top: 6px; }
+.set-doc ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.settings .card { margin-top: 0; }
+
+/* Mobile view everywhere (the Figma design is phone screens): on a laptop
+   the app is shown as a phone-width screen in the middle of the page. */
+@media (min-width: 480px) {
+  body { background: #eceef1; }
+  #root { position: relative; max-width: 430px; min-height: 100vh; margin: 0 auto; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 12px 40px rgba(0, 0, 0, 0.08); }
+  .content { max-width: none; }
+  .navbar { left: 50%; right: auto; width: 430px; transform: translateX(-50%); }
+  .tabs { margin-left: -20px; margin-right: -20px; }
 }

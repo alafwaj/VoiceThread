@@ -13,6 +13,10 @@ export const SessionRepository = {
   findById(id) {
     return db.prepare(`SELECT *, expires_at <= datetime('now') AS expired FROM sessions WHERE id = ?`).get(id);
   },
+  // Logs the user out everywhere except the browser they are using now.
+  deleteOthers(userId, keepId) {
+    db.prepare('DELETE FROM sessions WHERE user_id = ? AND id <> ?').run(userId, keepId);
+  },
   delete(id) {
     db.prepare('DELETE FROM sessions WHERE id = ?').run(id);
   },

@@ -2,9 +2,8 @@
 // The server builds the tree; collapsing a branch only changes this screen.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api } from '../api.js';
-import { go } from '../router.js';
 import PostCard from '../components/PostCard.jsx';
-import { BackIcon, UpIcon } from '../components/Icons.jsx';
+import { UpIcon } from '../components/Icons.jsx';
 
 // Counts every reply under a node, shown when the branch is collapsed (FR-17).
 function hiddenCount(node) {
@@ -30,7 +29,7 @@ function Branch({ node, depth, me, selectedId, onSelect, collapsed, toggle, refr
         onClick={(e) => {
           if (!e.target.closest('a, button, input, select, textarea')) onSelect(id);
         }}
-        onFocus={() => onSelect(id)}
+        onFocus={(e) => e.target === e.currentTarget && onSelect(id)}
         tabIndex={-1}
       >
         {selected && <span className="selected-tag">Selected</span>}
@@ -58,6 +57,7 @@ export default function Thread({ postId, me }) {
   const [error, setError] = useState('');
   const [selectedId, setSelectedId] = useState(postId);
   const [collapsed, setCollapsed] = useState(() => new Set());
+  const [touched, setTouched] = useState(false);
   const scrolled = useRef(false);
 
   const load = useCallback(() => {
@@ -88,7 +88,10 @@ export default function Thread({ postId, me }) {
     requestAnimationFrame(() => document.getElementById(`post-${postId}`)?.scrollIntoView({ block: 'center' }));
   }, [data, map, postId, collapsed]);
 
-  const select = useCallback((id) => setSelectedId(id), []);
+  const select = useCallback((id) => {
+    setSelectedId(id);
+    setTouched(true);
+  }, []);
 
   function moveTo(id) {
     setSelectedId(id);
@@ -122,17 +125,15 @@ export default function Thread({ postId, me }) {
   if (!data) return <p className="muted" aria-live="polite">Loading the conversation…</p>;
 
   const selected = map.get(selectedId);
+  const showSelection = touched || postId !== data.rootId;
   const parent = selected?.parent;
   const children = selected?.node.children ?? [];
 
   return (
     <section>
-      <div className="page-bar">
-        <button type="button" className="icon-btn" onClick={() => window.history.back()} aria-label="Go back"><BackIcon /></button>
-        <h1 className="page-title">Conversation</h1>
-      </div>
+      <h1 className="sr-only">Conversation</h1>
 
-      {selected && (parent || children.length > 0) && (
+      {showSelection && selected && (parent || children.length > 0) && (
         <nav className="tree-nav" aria-label="Move around the conversation">
           <span className="small muted">From the selected post:</span>
           <button type="button" className="btn btn-small btn-outline" disabled={!parent} onClick={() => moveTo(parent.post.id)}>
@@ -147,13 +148,9 @@ export default function Thread({ postId, me }) {
       )}
 
       <ul className="tree" aria-label="Conversation tree">
-        <Branch node={data.tree} depth={0} me={me} selectedId={selectedId} onSelect={select} collapsed={collapsed} toggle={toggle}
+        <Branch node={data.tree} depth={0} me={me} selectedId={showSelection ? selectedId : null} onSelect={select} collapsed={collapsed} toggle={toggle}
           refresh={load} />
       </ul>
-      <button type="button" className="btn btn-primary btn-block" onClick={() => go(`/record/reply/${selectedId}`)}
-        disabled={selected?.node.post.isDeleted}>
-        Reply to the selected post
-      </button>
     </section>
   );
 }
