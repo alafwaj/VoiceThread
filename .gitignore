@@ -13,6 +13,8 @@ coverage/
 
 # Run-time data: database files, uploaded audio and images
 storage/
+server/data/
+server/uploads/
 *.sqlite
 *.sqlite3
 *.db

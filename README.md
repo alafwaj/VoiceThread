@@ -4,7 +4,7 @@ VoiceThread is an audio-first social network. You record a short voice post and 
 
 This is Project 3 for SWEN 360 / CMPE 460 (Software Design and Engineering) at the American University of Bahrain, Fall 2026.
 
-We are in Sprint 2, which ends on November 13, 2026. Assignment 1 was submitted on October 13, 2026. Sprint 2 so far is the detailed design for Assignment 2: the architecture analysis, the class, component and sequence diagrams, high-fidelity wireframes and the ethical design statement. The development environment is set up, but the app has no features yet.
+We are in Sprint 2, which ends on November 13, 2026. Assignment 1 was submitted on October 13, 2026. Sprint 2 so far is the detailed design for Assignment 2: the architecture analysis, the class, component and sequence diagrams, high-fidelity wireframes and the ethical design statement. The Phase 2 prototype is a working website that runs locally: accounts, recording and publishing voice posts, voice replies, the conversation tree, the player, profiles, following, the Home feed, topics, bookmarks, sharing links and reporting. It follows the Phase 1 wireframes and the Sprint 2 design.
 
 ## Team
 
@@ -42,7 +42,17 @@ Then start the server and the interface together:
 npm run dev
 ```
 
-Open http://localhost:5173 in Chrome. The page should say "Server: running". If it says "not responding", look at the terminal for a `[server]` error. Press Ctrl+C in the terminal to stop both.
+Open http://localhost:5173 in Chrome or Edge and sign up. If a page says it cannot reach the server, look at the terminal for a `[server]` error. Press Ctrl+C in the terminal to stop both.
+
+The database (`server/data/`) and the uploaded recordings and photos (`server/uploads/`) are created the first time the server starts. They stay on your computer and are never committed. To start again with an empty app, stop the server and delete those two folders.
+
+Other commands, run from the repo folder:
+
+| Command | What it does |
+|---|---|
+| `npm test` | Runs the API tests in `server/test/`, on a throwaway database |
+| `npm run build` then `npm start` | Builds the interface and serves the whole app from http://localhost:3001 (for the demo) |
+| `npm run make-moderator -w server -- <username>` | Gives a user the moderator role, so they can review reported posts |
 
 The server runs on port 3001 and the interface on port 5173. The interface passes every `/api` request on to the server, so in the browser you only use port 5173.
 
