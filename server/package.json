@@ -3,10 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "dev": "node --experimental-sqlite --disable-warning=ExperimentalWarning --watch src/index.js",
+    "start": "node --experimental-sqlite --disable-warning=ExperimentalWarning src/index.js",
+    "make-moderator": "node --experimental-sqlite --disable-warning=ExperimentalWarning scripts/make-moderator.js",
+    "test": "node --experimental-sqlite --disable-warning=ExperimentalWarning --test test/*.test.js"
   },
   "dependencies": {
-    "express": "5.2.1"
+    "express": "5.2.1",
+    "multer": "2.5.0"
   }
 }
