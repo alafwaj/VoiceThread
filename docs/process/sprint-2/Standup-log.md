@@ -4,6 +4,7 @@
 |-|-|-|-|-|-|-|-|-|
 |1|2026-11-10|11:20 AM|In-person|Yaqoob Ibraheem|ALL present|-|2026-11-05-standup-1.jpq|2026-11-10|
 |2|2026-11-05|11:20 AM|In-person|Yaqoob ibraheem|ALL present|-|2026-11-10-standup-2 \& 2-1.jpg|2026-11-10|
+|3|2026-11-12|11:20 AM|In-person|Amin Fares|ALL present|-|2026-11-12-standup-3.jpg|2026-11-16|
 
 ## 2026-11-10: Sprint 2, stand-up 1
 
@@ -43,5 +44,24 @@ Proof: 2026-11-05-standup-1.jpg
 |What was discussed and decided||||
 |since everyone has begun their work, we will keep in touch always to be in sync. and since everything is working steadily, we will follow the steps of notetaking as we have been doing so far.||||
 
+## 2026-11-12: Sprint 2, stand-up 3
 
+Written on 2026-11-16 by Amin Fares, from notes taken at the meeting. Not uploaded on GitHub on the same day.
+Run by: Amin Fares
+Notes typed by: Amin Fares
+Present: ALL   Absent: None
+Proof: 2026-11-12-standup-3.jpg
 
+|Member|Done since last stand-up|Doing next|Blocked by|
+|-|-|-|-|
+|Amin|Approved and merged Omar's class diagram (#62). Replaced the placeholders in the component diagram with Omar's service and repository names, added section 8 to design.md (Sprint 2 documents, Session and Report tables, role on User) and updated the README links. PR #101 merged.|Help everyone else by reviewing their pull requests|Not recorded at the meeting|
+|Omar|Further fixed the UML class diagrams, added the Session classes, and completed all of Amin's review fixes.|Help everyone else by reviewing their pull requests|Not recorded at the meeting|
+|Yousif|"Did the sequence diagram and sent it for review."|Review Yaqoob's architecture work|Not recorded at the meeting|
+|Rayyan|Not started yet.|Finish the high-fidelity wireframes from Friday to Sunday|None|
+|Layla|Not started yet.|Start the ethics statement and burndown chart|None|
+|Yaqoob|Not recorded at the meeting|Not recorded at the meeting|Not recorded at the meeting|
+
+Decisions:
+Amin and Omar will help the rest of the team by reviewing their pull requests. Yousif will review Yaqoob's architecture work.
+Actions (who, what, by when):
+Rayyan: finish the high-fidelity wireframes by Sunday, 2026-11-15 (the due date).
