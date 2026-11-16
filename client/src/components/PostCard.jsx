@@ -1,18 +1,60 @@
-// One original post or reply, laid out as in Rayyan's design. Used on the
-// feed, the thread page, profiles, topic pages and bookmarks. Every icon
-// button has a text label for screen readers (NFR-03).
-import { useState } from 'react';
+// One original post or reply, laid out like Rayyan's Figma: the speaker and
+// date, the player, then likes, replies and share on the left and listens on
+// the right. Bookmark, report and delete are in the "more" menu (⋯).
+// Every icon button has a text label for screen readers (NFR-03).
+import { useEffect, useRef, useState } from 'react';
 import { api, audioUrl, shortDate } from '../api.js';
 import { go, linkTo, shareLink } from '../router.js';
 import Avatar from './Avatar.jsx';
 import Player from './Player.jsx';
 import ReportDialog from './ReportDialog.jsx';
 import { useToast } from './Toast.jsx';
-import { BookmarkIcon, ChatIcon, FlagIcon, ReplyIcon, ShareIcon, TrashIcon } from './Icons.jsx';
+import { BookmarkIcon, ChatIcon, FlagIcon, HeadphonesIcon, HeartIcon, MoreIcon, ShareIcon, TrashIcon } from './Icons.jsx';
+
+function compact(n) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace('.0', '')}M`;
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace('.0', '')}k`;
+  return String(n);
+}
+
+function MoreMenu({ items }) {
+  const [open, setOpen] = useState(false);
+  const box = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e) => !box.current?.contains(e.target) && setOpen(false);
+    const esc = (e) => e.key === 'Escape' && setOpen(false);
+    document.addEventListener('pointerdown', close);
+    document.addEventListener('keydown', esc);
+    return () => {
+      document.removeEventListener('pointerdown', close);
+      document.removeEventListener('keydown', esc);
+    };
+  }, [open]);
+  return (
+    <span className="more" ref={box}>
+      <button type="button" className="action" aria-label="More actions" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <MoreIcon />
+      </button>
+      {open && (
+        <span className="more-menu" role="menu">
+          {items.map((it) => (
+            <button key={it.label} type="button" role="menuitem" className={it.danger ? 'danger' : ''} onClick={() => { setOpen(false); it.onClick(); }}>
+              {it.icon} {it.label}
+            </button>
+          ))}
+        </span>
+      )}
+    </span>
+  );
+}
 
 export default function PostCard({ post, me, showOpenThread = true, onChange, onDeleted }) {
   const toast = useToast();
   const [bookmarked, setBookmarked] = useState(post.bookmarked);
+  const [liked, setLiked] = useState(post.liked);
+  const [likes, setLikes] = useState(post.likeCount ?? 0);
+  const [listens, setListens] = useState(post.listenCount ?? 0);
   const [reporting, setReporting] = useState(false);
 
   if (post.isDeleted) {
@@ -27,6 +69,20 @@ export default function PostCard({ post, me, showOpenThread = true, onChange, on
   const author = post.author;
   const mine = me && author && me.id === author.id;
   const replies = `${post.replyCount} ${post.replyCount === 1 ? 'reply' : 'replies'}`;
+
+  async function toggleLike() {
+    try {
+      const { post: p } = await api(liked ? 'DELETE' : 'POST', `/posts/${post.id}/like`);
+      setLiked(p.liked);
+      setLikes(p.likeCount);
+    } catch (err) {
+      toast(err.message);
+    }
+  }
+
+  function countListen() {
+    api('POST', `/posts/${post.id}/listens`).then(() => setListens((n) => n + 1)).catch(() => {});
+  }
 
   async function toggleBookmark() {
     try {
@@ -61,7 +117,13 @@ export default function PostCard({ post, me, showOpenThread = true, onChange, on
     }
   }
 
-  const label = post.title ? `"${post.title}" by ${author.displayName}` : `reply by ${author.displayName}`;
+  const label = post.title ? `"${post.title}" by ${author.username}` : `reply by ${author.username}`;
+  const menu = [
+    { label: bookmarked ? 'Remove bookmark' : 'Bookmark', icon: <BookmarkIcon filled={bookmarked} />, onClick: toggleBookmark },
+    mine
+      ? { label: 'Delete', icon: <TrashIcon />, onClick: remove, danger: true }
+      : { label: 'Report', icon: <FlagIcon />, onClick: () => setReporting(true) },
+  ];
 
   return (
     <article className="post" aria-label={label}>
@@ -87,36 +149,26 @@ export default function PostCard({ post, me, showOpenThread = true, onChange, on
         </ul>
       )}
 
-      <Player src={audioUrl(post.id)} duration={post.durationSeconds} label={label} seed={post.id} />
+      <Player src={audioUrl(post.id)} duration={post.durationSeconds} label={label} seed={post.id} onFirstPlay={countListen} />
 
       <footer className="post-actions">
-        {showOpenThread ? (
-          <a className="action" href={linkTo(`/thread/${post.id}`)} aria-label={`${replies}, open the conversation`} title="Open the conversation">
-            <ChatIcon /> <span>{post.replyCount}</span>
-          </a>
-        ) : (
-          <span className="action action-static" aria-label={replies} title={replies}><ChatIcon /> <span>{post.replyCount}</span></span>
-        )}
-        <button type="button" className="action" onClick={() => go(`/record/reply/${post.id}`)} aria-label="Reply with your voice" title="Reply">
-          <ReplyIcon /> <span className="action-text">Reply</span>
+        <button type="button" className={`action${liked ? ' action-on' : ''}`} onClick={toggleLike} aria-pressed={liked}
+          aria-label={`${liked ? 'Unlike' : 'Like'}, ${likes} ${likes === 1 ? 'like' : 'likes'}`} title={liked ? 'Unlike' : 'Like'}>
+          <HeartIcon filled={liked} /><span>{compact(likes)}</span>
         </button>
-        <button type="button" className="action" onClick={copyLink} aria-label="Copy link to this post" title="Copy link">
+        <button type="button" className="action" title={showOpenThread ? 'Open the conversation' : 'Reply with your voice'}
+          aria-label={showOpenThread ? `${replies}, open the conversation` : `${replies}, reply with your voice`}
+          onClick={() => go(showOpenThread ? `/thread/${post.id}` : `/record/reply/${post.id}`)}>
+          <ChatIcon /><span>{compact(post.replyCount)}</span>
+        </button>
+        <button type="button" className="action" onClick={copyLink} aria-label="Copy link to this post" title="Share">
           <ShareIcon />
         </button>
+        <MoreMenu items={menu} />
         <span className="action-gap" />
-        <button type="button" className={`action${bookmarked ? ' action-on' : ''}`} onClick={toggleBookmark} aria-pressed={bookmarked}
-          aria-label={bookmarked ? 'Bookmarked' : 'Bookmark'} title={bookmarked ? 'Remove bookmark' : 'Bookmark'}>
-          <BookmarkIcon filled={bookmarked} />
-        </button>
-        {mine ? (
-          <button type="button" className="action action-danger" onClick={remove} aria-label="Delete this post" title="Delete">
-            <TrashIcon />
-          </button>
-        ) : (
-          <button type="button" className="action" onClick={() => setReporting(true)} aria-label="Report this post" title="Report">
-            <FlagIcon />
-          </button>
-        )}
+        <span className="listens" aria-label={`${listens} ${listens === 1 ? 'listen' : 'listens'}`} title="Listens">
+          <HeadphonesIcon /><span>{compact(listens)}</span>
+        </span>
       </footer>
 
       {reporting && (

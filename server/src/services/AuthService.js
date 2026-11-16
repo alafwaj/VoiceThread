@@ -39,6 +39,16 @@ export const AuthService = {
     return SessionRepository.create(user.id);
   },
 
+  // Settings > Change password. Other devices are logged out afterwards.
+  changePassword(userId, sessionId, currentPassword, newPassword) {
+    const user = UserRepository.findWithPasswordById(userId);
+    if (!checkPassword(String(currentPassword ?? ''), user.password_hash)) throw new AppError(400, 'Your current password is wrong.');
+    if (String(newPassword ?? '').length < 8) throw new AppError(400, 'The new password must be at least 8 characters.');
+    if (newPassword === currentPassword) throw new AppError(400, 'Choose a password different from your current one.');
+    UserRepository.setPasswordHash(userId, hashPassword(newPassword));
+    SessionRepository.deleteOthers(userId, sessionId);
+  },
+
   logout(sessionId) {
     if (sessionId) SessionRepository.delete(sessionId);
   },

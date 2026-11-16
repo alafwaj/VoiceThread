@@ -91,6 +91,20 @@ CREATE TABLE IF NOT EXISTS reports (
 );
 `);
 
+db.exec(`
+CREATE TABLE IF NOT EXISTS likes (
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  post_id INTEGER NOT NULL REFERENCES posts(id),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (user_id, post_id)
+);
+`);
+
+// Databases made before likes and listens existed get the new column here,
+// so nobody has to delete their data.
+const postColumns = db.prepare('PRAGMA table_info(posts)').all().map((c) => c.name);
+if (!postColumns.includes('listen_count')) db.exec('ALTER TABLE posts ADD COLUMN listen_count INTEGER NOT NULL DEFAULT 0');
+
 // The fixed topic list (FR-19). Users pick from it and cannot add new ones.
 const TOPICS = ['Technology', 'Philosophy', 'Storytelling', 'Science', 'Music', 'Sports', 'Education', 'Culture', 'Everyday life'];
 const insertTopic = db.prepare('INSERT OR IGNORE INTO topics (name) VALUES (?)');

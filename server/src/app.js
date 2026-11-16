@@ -12,6 +12,8 @@ import { topicRoutes } from './routes/topics.js';
 import { followRoutes } from './routes/follows.js';
 import { bookmarkRoutes } from './routes/bookmarks.js';
 import { reportRoutes } from './routes/reports.js';
+import { searchRoutes } from './routes/search.js';
+import { notificationRoutes } from './routes/notifications.js';
 import { PHOTO_DIR } from './repositories/PhotoStore.js';
 import { AppError } from './errors.js';
 
@@ -28,6 +30,8 @@ export function createApp() {
   app.use('/api/follows', requireAuth, followRoutes);
   app.use('/api/bookmarks', requireAuth, bookmarkRoutes);
   app.use('/api/reports', requireAuth, reportRoutes);
+  app.use('/api/search', requireAuth, searchRoutes);
+  app.use('/api/notifications', requireAuth, notificationRoutes);
 
   // Profile photos are public pictures, like on any profile page.
   app.use('/api/photos', express.static(PHOTO_DIR, { fallthrough: false }));

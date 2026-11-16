@@ -12,6 +12,7 @@ process.env.VT_AUDIO_DIR = join(dir, 'audio');
 process.env.VT_PHOTO_DIR = join(dir, 'photos');
 
 const { createApp } = await import('../src/app.js');
+const { db } = await import('../src/db.js');
 let server, base;
 
 before(async () => {
@@ -21,7 +22,13 @@ before(async () => {
 });
 after(() => {
   server.close();
-  rmSync(dir, { recursive: true, force: true });
+  // Close the database first: Windows cannot delete a file that is still open.
+  db.close();
+  try {
+    rmSync(dir, { recursive: true, force: true });
+  } catch {
+    // If Windows still holds the folder, leave it in the temp folder; it is harmless.
+  }
 });
 
 // A tiny client that keeps one user's session cookie.
@@ -75,6 +82,18 @@ test('FR-02 and FR-03: log in by username or email, log out ends the session', a
   await c('POST', '/auth/logout');
   assert.equal((await c('GET', '/auth/me')).body.user, null);
   assert.equal((await c('GET', '/posts/feed')).status, 401, 'pages that need an account refuse');
+});
+
+test('Settings: change password checks the old one and logs out other devices', async () => {
+  const other = client();
+  await other('POST', '/auth/login', { usernameOrEmail: 'omar', password: 'password1' });
+  assert.equal((await omar('POST', '/auth/password', { currentPassword: 'nope', newPassword: 'newpassword1' })).status, 400);
+  assert.equal((await omar('POST', '/auth/password', { currentPassword: 'password1', newPassword: 'short' })).status, 400);
+  assert.equal((await omar('POST', '/auth/password', { currentPassword: 'password1', newPassword: 'newpassword1' })).status, 200);
+  assert.ok((await omar('GET', '/auth/me')).body.user, 'this device stays logged in');
+  assert.equal((await other('GET', '/auth/me')).body.user, null, 'the other device is logged out');
+  assert.equal((await client()('POST', '/auth/login', { usernameOrEmail: 'omar', password: 'newpassword1' })).status, 200);
+  assert.equal((await client()('POST', '/auth/password', { currentPassword: 'a', newPassword: 'bbbbbbbbb' })).status, 401);
 });
 
 test('FR-09 and FR-10: publishing checks title, topics, length, size and format', async () => {
@@ -162,6 +181,37 @@ test('FR-22: bookmarks are private and newest first', async () => {
   assert.deepEqual((await omar('GET', '/bookmarks')).body.posts.map((p) => p.id), [rootId]);
 });
 
+test('Likes and listens are real counts', async () => {
+  assert.equal((await omar('POST', `/posts/${rootId}/like`)).body.post.likeCount, 1);
+  await omar('POST', `/posts/${rootId}/like`);
+  const liked = (await amin('POST', `/posts/${rootId}/like`)).body.post;
+  assert.equal(liked.likeCount, 2, 'one like per user');
+  assert.equal(liked.liked, true);
+  assert.equal((await amin('DELETE', `/posts/${rootId}/like`)).body.post.likeCount, 1);
+  await omar('POST', `/posts/${rootId}/listens`);
+  await amin('POST', `/posts/${rootId}/listens`);
+  const t = (await omar('GET', `/posts/${rootId}/thread`)).body.tree.post;
+  assert.equal(t.listenCount, 2);
+  assert.equal(t.likeCount, 1);
+  assert.equal(t.liked, true);
+});
+
+test('B-18: search finds users, post titles and topics', async () => {
+  const r = (await omar('GET', '/search?q=first')).body;
+  assert.deepEqual(r.posts.map((p) => p.id), [rootId]);
+  assert.equal((await omar('GET', '/search?q=ami')).body.users[0].username, 'amin');
+  assert.equal((await omar('GET', '/search?q=techno')).body.topics[0].name, 'Technology');
+  assert.equal((await omar('GET', '/search?q=%25')).body.users.length, 0, '% is searched as text, not a wildcard');
+  assert.equal((await client()('GET', '/search?q=a')).status, 401);
+});
+
+test('Notifications show replies to my posts and new followers', async () => {
+  const list = (await amin('GET', '/notifications')).body.notifications;
+  assert.ok(list.some((n) => n.type === 'reply' && n.username === 'omar' && n.parentId === rootId));
+  assert.ok(list.some((n) => n.type === 'follow' && n.username === 'omar'));
+  assert.ok(!list.some((n) => n.username === 'amin'), 'my own replies are not notifications');
+});
+
 test('B-20: reports, and only moderators can list them', async () => {
   assert.equal((await omar('POST', '/reports', { postId: rootId, reason: 'Spam content' })).status, 201);
   assert.equal((await omar('GET', '/reports')).status, 403);
@@ -178,5 +228,6 @@ test('FR-11 and FR-18: only the author deletes; the marker keeps the tree', asyn
   assert.equal((await amin('GET', `/posts/${rootId}/audio`)).status, 404, 'audio is gone');
   assert.equal((await omar('POST', `/posts/${rootId}/replies`, recording())).status, 400, 'no replies to deleted posts');
   assert.equal((await omar('GET', '/bookmarks')).body.posts.length, 0, 'bookmarks removed');
+  assert.equal(t.post.likeCount, 0, 'likes removed');
   assert.ok(!(await omar('GET', '/posts/feed')).body.posts.some((p) => p.id === rootId));
 });

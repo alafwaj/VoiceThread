@@ -26,6 +26,18 @@ export const UserRepository = {
     );
     return this.findById(user.id);
   },
+  search(text) {
+    return db
+      .prepare(`SELECT ${PUBLIC} FROM users WHERE username LIKE :q ESCAPE '\\' OR display_name LIKE :q ESCAPE '\\' ORDER BY username LIMIT 20`)
+      .all({ q: text });
+  },
+  // Includes the password hash; only AuthService uses it.
+  findWithPasswordById(id) {
+    return db.prepare('SELECT * FROM users WHERE id = ?').get(id);
+  },
+  setPasswordHash(id, hash) {
+    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, id);
+  },
   setRole(username, role) {
     return db.prepare('UPDATE users SET role = ? WHERE username = ?').run(role, username).changes;
   },
