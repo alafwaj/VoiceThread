@@ -2,7 +2,7 @@
 
 This diagram shows what happens when a user answers a post with a voice reply. The post being answered can be an original post or another reply. It covers US-07 and requirements FR-09, FR-10 and FR-14, and shows how a reply is linked into the conversation tree (section 4 of `docs/design.md`).
 
-In Sprint 1 the server was one lifeline called API Server. In Sprint 2 it is split into the parts shown in `component.md` and `class.md`: the auth check, the posts route (the controller), `PostService`, `PostRepository` and `AudioRepository`. Every class and method name below is the one in `class.md`. The route is the one in `component.md`.
+The server flow is split into the auth middleware, Posts route (controller), `PostService`, the parent `Post` object, `PostRepository` and `AudioRepository`. The middleware authenticates the request before it reaches the route. Every class and method name below is the one in `class.md`, and the route is the one in `component.md`.
 
 The recording steps are the same as for an original post (see `sequence-create-post.md`), so they are shortened to one note here.
 
@@ -17,48 +17,59 @@ sequenceDiagram
     participant AC as Auth check<br/>(middleware)
     participant PR as Posts route<br/>(controller)
     participant PS as PostService
-    participant PRp as PostRepository<br/>(SQLite)
+    participant Parent as Post<br/>(parent object)
+    participant Repo as PostRepository<br/>(SQLite)
     participant AR as AudioRepository<br/>(audio folder)
 
-    U->>UI: Press reply on a post in the thread
+    U->>UI: Press Reply on a post in the thread
     Note over U,UI: Record, listen back, record again or discard,<br/>as for an original post (FR-06 to FR-08).<br/>A reply has no title or topics (FR-09).
     U->>UI: Press Publish
-    UI->>PR: POST /posts/:id/replies<br/>(recording, id of the post being answered)
-    PR->>AC: checkSession(sessionId)
-    AC-->>PR: The logged-in user, or refused (NFR-04)
+    UI->>AC: POST /posts/:id/replies<br/>(recording, parent post id)
+    AC->>AC: checkSession(sessionId)
     alt Not logged in
-        PR-->>UI: Refuse: login needed (FR-03)
-        UI-->>U: Send the user to the login page
+        AC-->>UI: Refuse: login needed (FR-03, NFR-04)
+        UI-->>U: Redirect to login page
     else Logged in
+        AC->>PR: Continue request with authenticated user
         PR->>PS: reply(parentId, authorId, audio)
-        PS->>PRp: findById(parentId)
-        PRp-->>PS: The post, or nothing
-        alt Post not found, or is_deleted is true
-            PS-->>PR: Refuse: this post cannot be answered (FR-14)
-            PR-->>UI: Refuse, with the reason
+        PS->>Repo: findById(parentId)
+        Repo-->>PS: Parent Post, or nothing
+        alt Parent not found or is_deleted = true
+            PS-->>PR: Refuse: parent cannot be answered (FR-14)
+            PR-->>UI: Refusal reason
             UI-->>U: Show that the post is no longer available
-        else Post found
-            PS->>PS: checkRecording(audio):<br/>length 30 s to 5 min, size up to 10 MB,<br/>format WebM, Ogg or MP4 (FR-10)
-            alt A check fails
-                PS-->>PR: Refuse, with the reason
-                PR-->>UI: Refuse, with the reason
+        else Parent exists and is not deleted
+            PS->>PS: checkRecording(audio):<br/>30 seconds to 5 minutes, up to 10 MB,<br/>WebM, Ogg or MP4 (FR-10)
+            alt Recording check fails
+                PS-->>PR: Refuse with validation reason
+                PR-->>UI: Refusal reason
                 UI-->>U: Show why the reply was refused
-            else All checks pass
+            else Recording check passes
                 PS->>AR: saveFile(audio)
-                AR-->>PS: The file name
-                PS->>PS: parent.reply(audio, authorId) makes the new Post:<br/>parent_post_id = the answered post's id,<br/>root_post_id = the answered post's root_post_id
-                PS->>PRp: save(post)
-                alt Saving to the database fails
-                    PRp-->>PS: Error
-                    PS->>AR: deleteFile(fileName) (NFR-06)
-                    PS-->>PR: Report that the reply failed
-                    PR-->>UI: Report that the reply failed
+                alt Audio file save fails
+                    AR-->>PS: File write error
+                    PS-->>PR: Report that reply could not be saved
+                    PR-->>UI: Save failure
                     UI-->>U: Show that the reply failed
-                else Saved
-                    PRp-->>PS: The saved Post, with its new id
-                    PS-->>PR: The new reply
-                    PR-->>UI: The new reply
-                    UI-->>U: Show the reply directly under the post it answers,<br/>whose reply count goes up by one (US-07)
+                else Audio file saved
+                    AR-->>PS: fileName
+                    PS->>Parent: reply(audio, authorId)
+                    Note right of Parent: Creates the new Post.<br/>parent_post_id = parent.id<br/>root_post_id = parent.root_post_id<br/>(an original post stores its own id there)
+                    Parent-->>PS: New Post object
+                    PS->>Repo: save(post)
+                    alt Database save fails
+                        Repo-->>PS: Database error
+                        PS->>AR: deleteFile(fileName)<br/>(cleanup, NFR-06)
+                        AR-->>PS: File deleted
+                        PS-->>PR: Report that reply could not be saved
+                        PR-->>UI: Save failure
+                        UI-->>U: Show that the reply failed
+                    else Database save succeeds
+                        Repo-->>PS: Saved Post with new id
+                        PS-->>PR: New reply
+                        PR-->>UI: New reply
+                        UI-->>U: Show the reply under the post it answers,<br/>whose reply count goes up by one (US-07)
+                    end
                 end
             end
         end
@@ -67,20 +78,22 @@ sequenceDiagram
 
 ## Who does what
 
-| Part | What it does in this flow | Name in `class.md` or `component.md` |
-|---|---|---|
-| Web Interface | Records the reply and sends it, then shows the result | Recorder page |
-| Auth check | Runs before the route and refuses anyone who is not logged in | `AuthService.checkSession(sessionId)` |
-| Posts route (controller) | Receives the request, passes it to the service, and sends the answer back. It holds no rules | `POST /posts/:id/replies` |
-| `PostService` | Holds the rules: the parent must exist and not be deleted, the recording must pass the checks, and the audio and the post are saved together | `PostService.reply(parentId, authorId, audio)` |
-| `PostRepository` | The only place that reads and writes the posts table in SQLite | `findById`, `save` |
-| `AudioRepository` | The only place that reads and writes the audio folder | `saveFile`, `deleteFile` |
+| Part | What it does in this flow |
+|---|---|
+| Web Interface | Records the reply and sends it, then shows the result |
+| Auth check (middleware) | Checks the session before the request reaches the Posts route; redirects unauthenticated users |
+| Posts route (controller) | Receives the authenticated request, calls the service, and returns the result. It holds no business rules |
+| `PostService` | Checks the parent and recording, coordinates file/database persistence, and cleans up a saved file if the database save fails |
+| `Post` (parent object) | Creates the reply through `parent.reply(audio, authorId)` |
+| `PostRepository` | Reads and writes posts in SQLite (`findById`, `save`) |
+| `AudioRepository` | Saves and deletes audio files (`saveFile`, `deleteFile`) |
 
 ## Notes
 
-- `parent_post_id` is what puts the reply in the right place in the tree. It points to the exact post being answered, at any depth (FR-14).
-- `root_post_id` is copied from the post being answered, so the new reply belongs to the same conversation and is loaded with it.
-- `PostService` looks up the post being answered before saving anything, so no reply is ever saved without a valid parent (NFR-06), and nobody can answer a deleted post (US-07). `Post.reply` also refuses a deleted post.
-- The audio file is saved before the post. If saving the post fails, `PostService` deletes the file it just saved, so a failed reply leaves no half-saved post and no unused audio file (NFR-06).
-- `checkRecording` is private to `PostService` (the `-` in `class.md`). The browser checks length and format too, to give quick feedback, but the server check is the one that counts (FR-10).
-- The reply count is not stored. It goes up because there is now one more post whose `parent_post_id` points to that post.
+- `parent_post_id` points to the exact post being answered, including when replying to another reply (FR-14).
+- `root_post_id` is copied from the post being answered. An original post stores its own id as its `root_post_id` (`design.md` section 4), so every reply, at any depth, gets the id of the original post and is loaded with the rest of the conversation.
+- The auth middleware runs before the controller. An unauthenticated request is refused by the middleware and does not enter `PostService` (FR-03, NFR-04).
+- The audio file is saved before the post. If `saveFile` fails, the service reports the failure and does not attempt the database save. If the database save fails after the file was written, the service deletes that file to avoid an orphaned audio file (NFR-06).
+- `checkRecording` is shown as a `PostService` self-call. The server-side check is authoritative (FR-10).
+- Database field names remain `snake_case` (`parent_post_id`, `root_post_id`, `is_deleted`); method parameters and local variables use `camelCase` (`parentId`, `authorId`, `fileName`).
+- The reply count is not stored. It increases because one more post has a `parent_post_id` pointing to the answered post.
