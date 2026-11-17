@@ -2,15 +2,17 @@
 
 |#|Date|Time|In person or online|Note-taker|Present|Absent|Proof file|Log committed on|
 |-|-|-|-|-|-|-|-|-|
-|1|2026-11-10|11:20 AM|In-person|Yaqoob Ibraheem|ALL present|-|2026-11-05-standup-1.jpq|2026-11-10|
-|2|2026-11-05|11:20 AM|In-person|Yaqoob ibraheem|ALL present|-|2026-11-10-standup-2 \& 2-1.jpg|2026-11-10|
-|3|2026-11-12|11:20 AM|In-person|Amin Fares|ALL present|-|2026-11-12-standup-3.jpg|2026-11-16|
+|1|2026-11-10|11:20 AM|In-person|Yaqoob Ibraheem|ALL present|-|2026-11-05-standup-1.eg|2026-11-10|
+|2|2026-11-05|11:20 AM|In-person|Yaqoob ibraheem|ALL present|-|2026-11-10-standup-2 \& 2-1.jpeg|2026-11-10|
+|3|2026-11-12|11:20 AM|In-person|Amin Fares|ALL present|-|2026-11-12-standup-3.jpeg|2026-11-16|
+|4|2026-11-15|11:20 AM|In-person|Yaqoob Ibraheem|All-1|Yousif|2026-11-12-standup-4 $ 4-b.jpeg|2026-11-16|
+|5|2026-11-17|11:20 AM|In-person|Amin Fares|ALL-1|Layla|2026-11-12-standup-5.jpeg|2026-11-16|
 
 ## 2026-11-05: Sprint 2, stand-up 1
 
 Run by: Yaqoob Ibraheem
 Notes typed by: Yaqoob Ibraheem, during the meeting
-Proof: 2026-11-05-standup-2.jpg, 2026-11-10-standup-2-1.jpg
+Proof: 2026-11-05-standup-2.jpeg, 2026-11-10-standup-2-1.jpeg
 
 |Member|Done since last stand-up|Doing next|Blocked by|
 |-|-|-|-|
@@ -90,7 +92,7 @@ Actions :
 - Layla: commit the ethics report
 - Yaqoob: fix the architecture report after the review
 
-### 2026-11-17 — Sprint 1, stand-up 5
+### 2026-11-17 — Sprint 2, stand-up 5
 
 *Run by:* Yaqoob Ibraheem
 *Present:* Amin, Yaqoob, Omer, Yousif, Rayyan
