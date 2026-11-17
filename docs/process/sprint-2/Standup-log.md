@@ -6,7 +6,7 @@
 |2|2026-11-05|11:20 AM|In-person|Yaqoob ibraheem|ALL present|-|2026-11-10-standup-2 \& 2-1.jpg|2026-11-10|
 |3|2026-11-12|11:20 AM|In-person|Amin Fares|ALL present|-|2026-11-12-standup-3.jpg|2026-11-16|
 
-## 2026-11-10: Sprint 2, stand-up 1
+## 2026-11-05: Sprint 2, stand-up 1
 
 Run by: Yaqoob Ibraheem
 Notes typed by: Yaqoob Ibraheem, during the meeting
@@ -26,7 +26,7 @@ We will start slow, no need to rush it at last moment, bets to take it steady. E
 Actions (who, what, by when):
 At the moment, the scrum master will just make the folders, and everyone is at liberty to start whenever they want. But by standup 3, everyone should have their work atleast somewhat presentable.
 
-## 2026-11-05: Sprint 2, stand-up 2
+## 2026-11-10: Sprint 2, stand-up 2
 
 Written on 2026-11-10 by Yaqoob Ibraheem, and confirmed by Amin on Discord. Not uploaded on GitHub at the same day, but proof is available of meeting.
 Run by: Yaqoob Ibraheem
@@ -66,7 +66,7 @@ Amin and Omar will help the rest of the team by reviewing their pull requests. Y
 Actions (who, what, by when):
 Rayyan: finish the high-fidelity wireframes by Sunday, 2026-11-15 (the due date).
 
-## YYYY-MM-DD: Sprint 2, stand-up 4
+## 2026-11-15: Sprint 2, stand-up 4
 Run by: Yaqoob
 Notes typed by: Yaqoob during the meeting
 Present:  Yaqoob , Amin, Omer, Rayyan,  Layla Absent: Yousif
