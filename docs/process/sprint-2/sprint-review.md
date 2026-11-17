@@ -2,23 +2,17 @@
 
 
 
-| Field | Entry |
+|| Field | Entry |
 
 |---|---|
 
-| Date | \_\_\_\_ |
-
-| In person or online | \_\_\_\_ |
+| Date | No separate Sprint Review meeting was held |
 
 | Run by (Scrum Master) | Yaqoob |
 
-| Present | \_\_\_\_ |
+| How the work was reviewed | Through pull request reviews and the stand-ups on 2026-11-12, 2026-11-15 and 2026-11-17 |
 
-| Absent | \_\_\_\_ |
-
-| Product Owner present | \_\_\_\_ (yes or no) |
-
-| Proof file | \_\_\_\_ |
+| Product Owner present | No |
 
 
 
