@@ -5,8 +5,8 @@
 |1|2026-11-10|11:20 AM|In-person|Yaqoob Ibraheem|ALL present|-|2026-11-05-standup-1.eg|2026-11-10|
 |2|2026-11-05|11:20 AM|In-person|Yaqoob ibraheem|ALL present|-|2026-11-10-standup-2 \& 2-1.jpeg|2026-11-10|
 |3|2026-11-12|11:20 AM|In-person|Amin Fares|ALL present|-|2026-11-12-standup-3.jpeg|2026-11-16|
-|4|2026-11-15|11:20 AM|In-person|Yaqoob Ibraheem|1|-|2026-11-12-standup-4 $ 4-b.jpeg|2026-11-16|
-|5|2026-11-17|11:20 AM|In-person|Amin Fares|1|-|2026-11-12-standup-5.jpeg|2026-11-16|
+|4|2026-11-15|11:20 AM|In-person|Yaqoob Ibraheem|All-1|Yousif|2026-11-12-standup-4 $ 4-b.jpeg|2026-11-16|
+|5|2026-11-17|11:20 AM|In-person|Amin Fares|ALL-1|Layla|2026-11-12-standup-5.jpeg|2026-11-16|
 
 ## 2026-11-05: Sprint 2, stand-up 1
 
