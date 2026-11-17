@@ -37,6 +37,8 @@ classDiagram
     AudioRepository ..> AudioFolder : reads and writes files
 ```
 
+`SQLite` and `AudioFolder` in this diagram are the storage the repositories use, not classes in `class.md`.
+
 - **Why it fits:**
   - The storage can change later without touching the rules. Only the repository would change if SQLite were replaced.
   - A service can be tested with a fake repository that holds a few posts in memory, with no database.

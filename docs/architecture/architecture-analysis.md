@@ -8,7 +8,7 @@ VoiceThread is an application which allows users to post voice messages and repl
 
 | Driver | Source | What it means for the architecture |
 |---|---|---|
-All modifications are validated by teh server| NFR-04, FR-11 | Logins and ownership are validated before any modification or deletion. |
+All modifications are validated by the server| NFR-04, FR-11 | Login is checked in one place (the API layer), and ownership is checked in the service layer before anything is saved or deleted. |
 | Server-side validations | FR-10 | Duration (30 seconds to 5 minutes), file size (up to 10MB) and format (WebM, Ogg, MP4) are validated even though the client browser is not performing the validation. |
 | Fast loading of a whole thread | FR-15, NFR-05 | Threaded tree is loaded in one query, thread containing 100 replies loads in less than 3 seconds on the demo laptop. |
 | Saves are not partial | NFR-06, FR-24 | Audio file and corresponding row in the database table will be saved as a couple, without being partially saved. |
@@ -21,19 +21,24 @@ We compared three styles at the level of the whole application.
 
 ### 2.1 Layered client-server
 
-The Three-Tier Client-Server Architecture divides systems into presentation, application, and data layers, increasing scalability, maintainability, and efficiency. By separating the concerns, this model optimizes resource management and allows for independent scaling and updates, making it a popular choice for complex distributed systems.
+Client-Server Model: Three-Tier System divides systems into presentation, application, and data layers. This improves system scalability, maintainability, and performance. Because this model separates concerns, it is possible to have good resource management, scalability, and updates, making it highly popular among complex distributed systems. *Referenced from geeks for geeks*
 
+The project is broken down into three separate environments. The Presentation Tier contains the  mobile or web application with the UI for the audio recorder. The Application Tier contains APIs for user authentication, feed creation, and audio validation. The Data Tier contains  relational database (users and posts) and cloud object storage (.mp3/.wav files).
 
 ### 2.2 MVC
 
-Over the last few years, websites have shifted from simple HTML pages with a bit of CSS to incredibly complex applications with thousands of developers working on them at the same time. To work with these complex web applications developers use different design patterns to lay out their projects, to make the code less complex and easier to work with. The most popular of these patterns is MVC also known as Model View Controller.
+In recent times, websites have gone through a change from simple HTML pages with some CSS to very complicated applications with many developers working on them simultaneously. In order to develop these complicated web applications, there are various design patterns that help developers in designing their project layout in order to reduce complexity and simplify the process of development. One such pattern is called MVC or Model View Controller. *Refefernced from geeks for geeks*
+
+The codebase consists of three major folders within one repository. Models provide a schema for the database of User, VoiceNote, and Follower. Views display the timeline, user profile, and audio waveforms. The controllers are the traffic cops that get an uploaded voice note from the View, check its duration, and store it using the Model.
 
 ### 2.3 Microservices
 
-Microservices is an architecture where an application is divided into small, independent services that communicate over a network. Each service handles a specific function and can be developed and deployed separately.
+Microservices is a software architecture design that involves breaking down an application into smaller pieces, each running as a service, communicating over a network. Each service performs a particular role and can be developed and deployed independently.
 
-Services can be built using different programming languages and frameworks.
-Each microservice is loosely coupled and can be developed, deployed, and scaled independently.
+The services can be written in various programming languages and frameworks.
+Each service is loosely coupled and can be developed and deployed independently. *Referenced from geeks for geeks*
+
+In place of a single code base, you will now have several different separate repositories and databases. This will include the Auth Service (login), the Timeline Service (getting feeds), the Audio Processing Service (voice note transcoding and waveform generation), and the Notification Service (alerts on replies).
 
 
 ## 3. Comparison
@@ -41,7 +46,7 @@ Each microservice is loosely coupled and can be developed, deployed, and scaled 
 | Criterion | Layered client-server | MVC | Microservices |
 |---|---|---|---|
 | Scalability | Scales using a larger machine. The repositories abstract away the storage, meaning that SQLite and the audio folder could be swapped out with PostgreSQL and cloud storage respectively without affecting the rest. Much more than a class demo requires. | The same as layered: one application, scaling as a whole. | Best. The audio service could scale separately. Much more than a local demo with few users requires. |
-| Security | Single entry point (API). Authentication and authorization are done only once, in the API layer, for all requests (NFR-04, FR-11). | Checks are often done in individual controllers, meaning that one overlooked check opens a security flaw. | Greatest potential attack surface: every service requires its own protection and services need to trust each other. |
+| Security | Single entry point (API). Login is checked once, in the API layer, for every request, and ownership is checked in the service layer before any change (NFR-04, FR-11) | Checks are often done in individual controllers, meaning that one overlooked check opens a security flaw. | Greatest potential attack surface: every service requires its own protection and services need to trust each other. |
 | Maintainability | Each layer does a single job and thus is testable on its own. The folder structure is structured according to the layers, hence, making it easy for new team members to locate the source code. | Very familiar and simple yet controllers become quite large and blend request handling with rules. | Services can evolve separately; however, one feature uses many services which makes debugging difficult and keeping data consistent across many services is difficult (NFR-06). |
 | Team suitability (six students, one semester) | JavaScript throughout, one repository, one command to start application and the work separates naturally based on layers. Satisfies NFR-08. | Very easy to learn and very suitable with React and Express. | Infeasible. Many services to develop, deploy, start; setup in 15 min is unrealistic (NFR-08). |
 
@@ -70,15 +75,15 @@ Example: layered scores 0.15 x 3 + 0.25 x 4 + 0.30 x 5 + 0.30 x 5 = 4.45.
 
 | Layer | Responsibility | Examples |
 |---|---|---|
-| Presentation | Screens in the browser. It talks only to the API. | Feed, Thread, Recorder, Player, Profile, Topics, Bookmarks |
-| API | Receives requests, checks that the user is logged in and owns the data. | auth, posts, topics, follows, bookmarks routes |
-| Service | The business rules. | Recording checks (FR-10), reply rules (FR-14), delete rules (FR-18), feed order (FR-21) |
+| Presentation | Screens in the browser. It talks only to the API. | Login, Feed, Thread, Recorder, Player, Profile, Topics, Bookmarks|
+| API |Receives requests and checks that the user is logged in. | auth, users, posts, topics, follows, bookmarks, reports routes |
+| Service | The business rules, including who owns what. | Recording checks (FR-10), ownership checks (FR-11), reply rules (FR-14), delete rules (FR-18), feed order (FR-21), moderator check for reports |
 | Data access | Reads and writes storage. | PostRepository, UserRepository |
 | Storage | Keeps the data. | SQLite database, audio folder |
 
 Why it fits VoiceThread:
 
-- **Security (NFR-04, FR-11):** the API layer is the only place where the check for login and ownership takes place, therefore an external request cannot circumvent it.
+- **Security (NFR-04, FR-11):** the API layer is the single place where login is checked, and the service layer checks ownership and that a moderator handles reports, so a request from outside our interface cannot skip either check. Reports are our safety feature, so they have their own route.
 - **Validation (FR-10):** the recording rules exist once in the service layer and apply both to original postings and replies (US-04, US-07).
 - **The conversation tree (US-08, FR-15):** the repository loads all the postings of a thread in a single query and the service layer constructs the tree and returns it to the browser.
 - **Reliability (NFR-06, FR-24):** the service layer stores the audio file first and the database entry second, and deletes the file in case the second operation fails, which ensures that no reply is stored without its parent and audio is not orphaned.
