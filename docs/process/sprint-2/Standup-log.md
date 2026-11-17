@@ -65,3 +65,59 @@ Decisions:
 Amin and Omar will help the rest of the team by reviewing their pull requests. Yousif will review Yaqoob's architecture work.
 Actions (who, what, by when):
 Rayyan: finish the high-fidelity wireframes by Sunday, 2026-11-15 (the due date).
+
+## YYYY-MM-DD: Sprint 2, stand-up 4
+Run by: Yaqoob
+Notes typed by: Yaqoob during the meeting
+Present:  Yaqoob , Amin, Omer, Rayyan,  Layla Absent: Yousif
+Proof: 2026-11-15-standup-3.png, 2026-11-15-standup-3-b.png
+
+| Member | Done since last stand-up | Doing next | Blocked by |
+|---|---|---|---|
+| Rayyan | Drew the wireframes and started his Part 2 report | Working on Updating the wireframe| [none raised] |
+| Omar | Finished his work | Update the Kanban board | [none raised] |
+| Amin | Finished his work | Update the Kanban board | [none raised] |
+| Layla | Working on the ethics report; nothing committed yet | Commit the ethics report | waiting for standup logs |
+| Yaqoob | Committed the architecture report in parts | Fix the points raised in the review |  |
+| Yousif | - | -  | - |
+
+Decisions:
+- We are almost done with everything,  rayyan will review yousif to confirm the sequence diagram is correct.
+- Amin and omer will review each other's work , and be done with the core part that will lead us in sprint 3.
+
+Actions :
+- Omar and Amin: update their cards on the Kanban board
+- Layla: commit the ethics report
+- Yaqoob: fix the architecture report after the review
+
+### 2026-11-17 — Sprint 1, stand-up 5
+
+*Run by:* Yaqoob Ibraheem
+*Present:* Amin, Yaqoob, Omer, Yousif, Rayyan
+*Absent:* Layla
+*Proof:* 2026-11-17-standup-5.jpeg
+
+| Member | Done since last stand-up | Doing next | Blocked by |
+|---|---|---|---|
+| Amin | Finished his work | No further work specified | None reported |
+| Rayyan | Finished his work | Awaiting review | Pending review |
+| Omer | Almost finished his work | Complete the last few tweaks | None reported |
+| Yaqoob | Completed the architecture | Finish the documentation | None reported |
+| Layla |- | -| - |
+| Yousif | Review identified updates needed in the UML sequence diagram | Update the sequence diagram and send it for review | Required sequence-diagram updates following review |
+
+*Decisions:*
+- Finish all remaining last-minute changes.
+- Prepare the report.
+- Aim to complete everything by tonight.
+- Introduce a new reviewing schema because the team agreed that the review assignee should change.
+
+*Actions (who, what, by when):*
+- Amin: Work is finished.
+- Rayyan: Await review of completed work.
+- Omer: Complete the remaining tweaks.
+- Yaqoob: Finish the documentation.
+- Layla: Commit the locally completed work around 3:00 PM.
+- Yousif: Update the UML sequence diagram and send it for review.
+- Team: Complete the remaining changes and prepare the report by tonight.
+- Team: Finalize and apply the revised review-assignee schema.
